@@ -1,0 +1,19 @@
+name: flutter-engineer-codecheck-2024
+packages:
+  - packages/**
+ignore:
+  - "packages/mason"
+sdkPath: .fvm/flutter_sdk
+
+scripts:
+  analyze:
+    exec: dart analyze .
+  build_runner:
+    run: melos exec  --depends-on="build_runner" -- fvm dart run build_runner build --delete-conflicting-outputs
+  build_watch:
+    run: melos exec  --depends-on="build_runner" -- fvm dart run build_runner watch --delete-conflicting-outputs
+  gen-l10n:
+    run: melos exec  --depends-on="intl" -- fvm flutter gen-l10n --no-nullable-getter  --untranslated-messages-file l10n_missing_keywords.txt
+
+  init:
+    run: melos bs && melos gen-l10n && melos build_runner
