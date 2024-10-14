@@ -28,8 +28,6 @@ void main() {
 
   final mockHttpClient = MockClient();
 
-  final mockServiceLocator = MockServiceLocator();
-  when(mockServiceLocator.httpClient).thenReturn(mockHttpClient);
   ServiceLocator.init(
     mockHttpClient,
     MockUseCaseList(),

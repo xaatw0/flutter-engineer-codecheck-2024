@@ -1,7 +1,5 @@
 // github_search_repositories_data.dart
 
-import 'dart:convert';
-
 class GithubSearchRepositoriesData {
   final int totalCount;
   final bool incompleteResults;

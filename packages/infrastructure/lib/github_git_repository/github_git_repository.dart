@@ -4,6 +4,8 @@ import 'package:domain/service_locator.dart';
 import 'package:infrastructure/github_git_repository/data/github_search_repositories_data.dart';
 
 class GithubGitRepository {
+  const GithubGitRepository();
+
   Future<GithubSearchRepositoriesData> searchRepositories(
       String keyword, int page) async {
     final httpClient = ServiceLocator.singleton().httpClient;
