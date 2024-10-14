@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SearchRepositoriesPage extends ConsumerWidget {
   const SearchRepositoriesPage({super.key});
 
+  static const _kDescriptionLength = 50;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dummyData = ServiceLocator.singleton()
@@ -17,11 +19,36 @@ class SearchRepositoriesPage extends ConsumerWidget {
         body: SafeArea(
           child: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(child: TextField()),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded))
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search word',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.search,
+                        onChanged: (value) {},
+                        onSubmitted: (value) {},
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    CircleAvatar(
+                      radius: 32,
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.search_rounded,
+                            size: 32.0,
+                          )),
+                    ),
+                  ],
+                ),
               ),
               FutureBuilder(
                   future: dummyData,
@@ -33,11 +60,26 @@ class SearchRepositoriesPage extends ConsumerWidget {
 
                     return Expanded(
                         child: ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) => ListTile(
-                        title: Text(data[index].repositoryName),
-                      ),
-                    ));
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final item = data[index];
+
+                              final description =
+                                  item.description.length < _kDescriptionLength
+                                      ? item.description
+                                      : item.description
+                                          .substring(0, _kDescriptionLength);
+
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  radius: 32,
+                                  backgroundImage:
+                                      NetworkImage(item.authorImage),
+                                ),
+                                title: Text(item.repositoryName),
+                                subtitle: Text(description),
+                              );
+                            }));
                   })
             ],
           ),
