@@ -9,6 +9,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  domain:
+    path: ../domain
+  github_browser_app:
+    path: ../github_browser_app
+  use_case:
+    path: ../use_case
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:

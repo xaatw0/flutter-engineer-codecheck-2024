@@ -8,6 +8,8 @@ sdkPath: .fvm/flutter_sdk
 scripts:
   analyze:
     exec: dart analyze .
+  test:
+    run: melos exec  --dir-exists="test" -- fvm flutter test
   build_runner:
     run: melos exec  --depends-on="build_runner" -- fvm dart run build_runner build --delete-conflicting-outputs
   build_watch:

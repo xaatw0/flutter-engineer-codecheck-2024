@@ -1,18 +1,25 @@
+import 'package:domain/use_case/use_case_list.dart';
 import 'package:http/http.dart' as http;
 
 class ServiceLocator {
-  static ServiceLocator? _instance;
+  static late final ServiceLocator _instance;
 
   static ServiceLocator singleton() {
-    return _instance ??= ServiceLocator._();
+    return _instance;
   }
 
-  ServiceLocator._();
+  ServiceLocator._(
+    this._httpClient,
+    this._useCaseList,
+  );
 
-  static void setMock(ServiceLocator? mock) {
-    _instance = mock;
+  static void init(http.Client httpClient, UseCaseList useCaseList) {
+    _instance = ServiceLocator._(httpClient, useCaseList);
   }
 
-  final http.Client _httpClient = http.Client();
+  final http.Client _httpClient;
   http.Client get httpClient => singleton()._httpClient;
+
+  final UseCaseList _useCaseList;
+  UseCaseList get useCaseList => singleton()._useCaseList;
 }
