@@ -1,6 +1,7 @@
-import 'package:domain/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'search_repositories_state.dart';
 
 class SearchRepositoriesPage extends ConsumerWidget {
   const SearchRepositoriesPage({super.key});
@@ -9,10 +10,10 @@ class SearchRepositoriesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dummyData = ServiceLocator.singleton()
-        .useCaseList
-        .getSearchRepositoriesUseCase()
-        .loadGitRepositories('keyword', 0);
+    final isLoading = ref.watch(searchRepositoriesStateProvider).isLoading;
+    final items = ref.watch(searchRepositoriesStateProvider).entities;
+
+    final isSearched = ref.read(searchRepositoriesStateProvider).isSearched;
 
     return MaterialApp(
       home: Scaffold(
@@ -26,61 +27,88 @@ class SearchRepositoriesPage extends ConsumerWidget {
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
-                          hintText: 'Search word',
+                          hintText: 'Input search word',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(32),
                           ),
                         ),
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.search,
-                        onChanged: (value) {},
-                        onSubmitted: (value) {},
+                        onChanged: (value) => ref
+                            .read(searchRepositoriesStateProvider.notifier)
+                            .changeKeyword(value),
+                        onSubmitted: (value) {
+                          ref
+                              .read(searchRepositoriesStateProvider.notifier)
+                              .loadRepositories();
+                        },
+                        readOnly: isSearched,
                       ),
                     ),
                     const SizedBox(width: 16),
                     CircleAvatar(
                       radius: 32,
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: isSearched
+                              ? () => ref
+                                  .read(
+                                      searchRepositoriesStateProvider.notifier)
+                                  .reset()
+                              : ref
+                                      .read(searchRepositoriesStateProvider)
+                                      .keyword
+                                      .isEmpty
+                                  ? null
+                                  : () => ref
+                                      .read(searchRepositoriesStateProvider
+                                          .notifier)
+                                      .loadRepositories(),
                           icon: Icon(
-                            Icons.search_rounded,
+                            isSearched ? Icons.cancel : Icons.search,
                             size: 32.0,
                           )),
                     ),
                   ],
                 ),
               ),
-              FutureBuilder(
-                  future: dummyData,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Container();
-                    }
-                    final data = snapshot.data!;
+              Expanded(
+                  child: NotificationListener(
+                onNotification: (ScrollEndNotification notification) {
+                  final isScrollToEnd = notification.metrics.extentAfter == 0;
 
-                    return Expanded(
-                        child: ListView.builder(
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              final item = data[index];
+                  if (isScrollToEnd) {
+                    ref
+                        .read(searchRepositoriesStateProvider.notifier)
+                        .loadRepositories();
+                  }
+                  return false;
+                },
+                child: ListView.builder(
+                    itemCount: items.length + (isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == items.length) {
+                        return SizedBox.square(
+                            dimension: 32.0,
+                            child: const CircularProgressIndicator());
+                      }
 
-                              final description =
-                                  item.description.length < _kDescriptionLength
-                                      ? item.description
-                                      : item.description
-                                          .substring(0, _kDescriptionLength);
+                      final item = items[index];
 
-                              return ListTile(
-                                leading: CircleAvatar(
-                                  radius: 32,
-                                  backgroundImage:
-                                      NetworkImage(item.authorImage),
-                                ),
-                                title: Text(item.repositoryName),
-                                subtitle: Text(description),
-                              );
-                            }));
-                  })
+                      final description = item.description.length <
+                              _kDescriptionLength
+                          ? item.description
+                          : item.description.substring(0, _kDescriptionLength);
+
+                      return ListTile(
+                        leading: CircleAvatar(
+                          radius: 32,
+                          backgroundImage: NetworkImage(item.authorImage),
+                        ),
+                        title: Text(item.repositoryName),
+                        subtitle: Text(description),
+                      );
+                    }),
+              )),
             ],
           ),
         ),
