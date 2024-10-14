@@ -16,4 +16,10 @@ class _dummyRepository implements GithubGitRepository {
       String keyword, int page) async {
     return _dummyData;
   }
+
+  @override
+  void catchNetworkException(Object e) {}
+
+  @override
+  void catchExceptionFromGithub(String message) {}
 }
