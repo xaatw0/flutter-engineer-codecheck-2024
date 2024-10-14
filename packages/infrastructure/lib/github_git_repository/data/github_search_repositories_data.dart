@@ -480,7 +480,7 @@ class License {
       key: json['key'],
       name: json['name'],
       spdxId: json['spdx_id'],
-      url: json['url'],
+      url: json['url'] ?? '',
       nodeId: json['node_id'],
     );
   }
