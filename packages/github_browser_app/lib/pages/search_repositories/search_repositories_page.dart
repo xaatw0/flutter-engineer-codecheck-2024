@@ -5,15 +5,19 @@ import 'package:modeless_drawer/modeless_drawer.dart';
 
 import 'search_repositories_state.dart';
 
+part 'search_repositories_page.repository_tile.dart';
+part 'search_repositories_page.detail_drawer.dart';
+part 'search_repositories_page.keyword_text_field.dart';
+part 'search_repositories_page.search_cancel_button.dart';
+
 class SearchRepositoriesPage extends ConsumerWidget {
   const SearchRepositoriesPage({super.key});
-
-  static const _kDescriptionLength = 50;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(searchRepositoriesStateProvider).isLoading;
     final items = ref.watch(searchRepositoriesStateProvider).entities;
+
     final isSearched = ref.read(searchRepositoriesStateProvider).isSearched;
 
     final _kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
@@ -29,48 +33,32 @@ class SearchRepositoriesPage extends ConsumerWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Input search word',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(32),
-                            ),
-                          ),
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.search,
-                          onChanged: (value) => ref
+                        child: _KeywordTextField(
+                          isSearched: isSearched,
+                          onChanged: ref
                               .read(searchRepositoriesStateProvider.notifier)
-                              .changeKeyword(value),
-                          onSubmitted: (value) {
-                            ref
-                                .read(searchRepositoriesStateProvider.notifier)
-                                .loadRepositories();
-                          },
-                          readOnly: isSearched,
+                              .changeKeyword,
+                          onSubmitted: ref
+                              .read(searchRepositoriesStateProvider.notifier)
+                              .loadRepositories,
                         ),
                       ),
                       const SizedBox(width: 16),
                       CircleAvatar(
                         radius: 32,
-                        child: IconButton(
-                            onPressed: isSearched
-                                ? () => ref
-                                    .read(searchRepositoriesStateProvider
-                                        .notifier)
-                                    .reset()
-                                : ref
-                                        .read(searchRepositoriesStateProvider)
-                                        .keyword
-                                        .isEmpty
-                                    ? null
-                                    : () => ref
-                                        .read(searchRepositoriesStateProvider
-                                            .notifier)
-                                        .loadRepositories(),
-                            icon: Icon(
-                              isSearched ? Icons.cancel : Icons.search,
-                              size: 32.0,
-                            )),
+                        child: _SearchCancelButton(
+                          isSearched: isSearched,
+                          isKeywordEmpty: ref
+                              .read(searchRepositoriesStateProvider)
+                              .keyword
+                              .isEmpty,
+                          onReset: () => ref
+                              .read(searchRepositoriesStateProvider.notifier)
+                              .reset(),
+                          onSearch: () => ref
+                              .read(searchRepositoriesStateProvider.notifier)
+                              .loadRepositories(),
+                        ),
                       ),
                     ],
                   ),
@@ -96,70 +84,15 @@ class SearchRepositoriesPage extends ConsumerWidget {
                               child: const CircularProgressIndicator());
                         }
 
-                        final item = items[index];
-
-                        final description =
-                            item.description.length < _kDescriptionLength
-                                ? item.description
-                                : item.description
-                                    .substring(0, _kDescriptionLength);
-
-                        return ListTile(
-                          leading: CircleAvatar(
-                            radius: 32,
-                            backgroundImage: NetworkImage(item.authorImage),
-                          ),
-                          title: Text(item.repositoryName),
-                          subtitle: Text(description),
-                          onTap: () => _kerDrawer.currentState
-                            ?..changeValue(item)
-                            ..open(),
+                        return _RepositoryTile(
+                          kerDrawer: _kerDrawer,
+                          item: items[index],
                         );
                       }),
                 )),
               ],
             ),
-            ModelessDrawer<GitRepositoryEntity>(
-                key: _kerDrawer,
-                width: MediaQuery.sizeOf(context).width * 2 / 3,
-                builder: (BuildContext context, GitRepositoryEntity? item) {
-                  if (item == null) {
-                    return Text('No data');
-                  }
-
-                  final pairs = [
-                    (Icons.star, item.stargazersCount),
-                    (Icons.fork_right, item.forksCount),
-                    (Icons.remove_red_eye, item.watchersCount),
-                    (Icons.question_mark, item.issuesCount),
-                  ];
-
-                  return Column(
-                    children: [
-                      Text(
-                        item.repositoryName,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 16),
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundImage: NetworkImage(item.authorImage),
-                      ),
-                      Text(item.authorName),
-                      const SizedBox(height: 16),
-                      for (final (icon, count) in pairs) ...[
-                        Row(
-                          children: [
-                            Icon(icon),
-                            Text('$count'),
-                          ],
-                        ),
-                      ],
-                      const SizedBox(height: 32),
-                      Text(item.description),
-                    ],
-                  );
-                }),
+            _DetailDrawer(kerDrawer: _kerDrawer),
           ],
         ),
       ),
