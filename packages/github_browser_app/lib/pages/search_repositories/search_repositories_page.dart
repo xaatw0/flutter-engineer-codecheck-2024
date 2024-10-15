@@ -17,10 +17,16 @@ class SearchRepositoriesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(searchRepositoriesStateProvider).isLoading;
-    final items = ref.watch(searchRepositoriesStateProvider).entities;
+    // watch対象
+    final isLoading =
+        ref.watch(searchRepositoriesStateProvider.select((e) => e.isLoading));
+    final isSearched =
+        ref.watch(searchRepositoriesStateProvider.select((e) => e.isSearched));
+    final isKeywordEmpty = ref.watch(
+        searchRepositoriesStateProvider.select((e) => e.keyword.isEmpty));
 
-    final isSearched = ref.read(searchRepositoriesStateProvider).isSearched;
+    // 追加前後にisLoadingが変更、リセット時にisSearchedがfalseになるので、watchする必要がない
+    final items = ref.read(searchRepositoriesStateProvider).entities;
 
     final _kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
 
@@ -40,12 +46,10 @@ class SearchRepositoriesPage extends ConsumerWidget {
                           onChanged: ref
                               .read(searchRepositoriesStateProvider.notifier)
                               .changeKeyword,
-                          onSubmitted: () => showSnackBarWhenCatchException(
-                            context,
-                            () => ref
-                                .read(searchRepositoriesStateProvider.notifier)
-                                .loadRepositories(),
-                          ),
+                          onSubmitted: () => onSearch(
+                              context,
+                              ref.read(
+                                  searchRepositoriesStateProvider.notifier)),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -53,19 +57,14 @@ class SearchRepositoriesPage extends ConsumerWidget {
                         radius: 32,
                         child: _SearchCancelButton(
                           isSearched: isSearched,
-                          isKeywordEmpty: ref
-                              .read(searchRepositoriesStateProvider)
-                              .keyword
-                              .isEmpty,
+                          isKeywordEmpty: isKeywordEmpty,
                           onReset: () => ref
                               .read(searchRepositoriesStateProvider.notifier)
                               .reset(),
-                          onSearch: () => showSnackBarWhenCatchException(
-                            context,
-                            () => ref
-                                .read(searchRepositoriesStateProvider.notifier)
-                                .loadRepositories(),
-                          ),
+                          onSearch: () => onSearch(
+                              context,
+                              ref.read(
+                                  searchRepositoriesStateProvider.notifier)),
                         ),
                       ),
                     ],
@@ -109,15 +108,17 @@ class SearchRepositoriesPage extends ConsumerWidget {
 
   void showSnackBarWhenCatchException(
     BuildContext context,
-    Future<void> Function() funcLoading,
-  ) {
-    funcLoading().catchError((onError) {
-      final errorMessage = onError is ExceptionsWhenLoadingRepositories
-          ? onError.message
-          : onError.toString();
+    Future<void> Function() funcLoading, {
+    required void Function() onError,
+  }) {
+    funcLoading().catchError((ex) {
+      final errorMessage =
+          ex is ExceptionsWhenLoadingRepositories ? ex.message : ex.toString();
 
       final snackBar = buildSnackBar(errorMessage);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      onError();
     });
   }
 
@@ -142,6 +143,14 @@ class SearchRepositoriesPage extends ConsumerWidget {
       elevation: 4.0,
       clipBehavior: Clip.hardEdge,
       dismissDirection: DismissDirection.horizontal,
+    );
+  }
+
+  void onSearch(BuildContext context, SearchRepositoriesState notifier) {
+    showSnackBarWhenCatchException(
+      context,
+      () => notifier.loadRepositories(),
+      onError: notifier.reset,
     );
   }
 }
