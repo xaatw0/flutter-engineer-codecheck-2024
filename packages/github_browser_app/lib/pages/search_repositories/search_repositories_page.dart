@@ -1,4 +1,5 @@
 import 'package:domain/entities/git_repository_entity.dart';
+import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modeless_drawer/modeless_drawer.dart';
@@ -38,9 +39,12 @@ class SearchRepositoriesPage extends ConsumerWidget {
                           onChanged: ref
                               .read(searchRepositoriesStateProvider.notifier)
                               .changeKeyword,
-                          onSubmitted: ref
-                              .read(searchRepositoriesStateProvider.notifier)
-                              .loadRepositories,
+                          onSubmitted: () => showSnackBarWhenCatchException(
+                            context,
+                            () => ref
+                                .read(searchRepositoriesStateProvider.notifier)
+                                .loadRepositories(),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -55,9 +59,12 @@ class SearchRepositoriesPage extends ConsumerWidget {
                           onReset: () => ref
                               .read(searchRepositoriesStateProvider.notifier)
                               .reset(),
-                          onSearch: () => ref
-                              .read(searchRepositoriesStateProvider.notifier)
-                              .loadRepositories(),
+                          onSearch: () => showSnackBarWhenCatchException(
+                            context,
+                            () => ref
+                                .read(searchRepositoriesStateProvider.notifier)
+                                .loadRepositories(),
+                          ),
                         ),
                       ),
                     ],
@@ -96,6 +103,44 @@ class SearchRepositoriesPage extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showSnackBarWhenCatchException(
+    BuildContext context,
+    Future<void> Function() funcLoading,
+  ) {
+    funcLoading().catchError((onError) {
+      final errorMessage = onError is ExceptionsWhenLoadingRepositories
+          ? onError.message
+          : onError.toString();
+
+      final snackBar = buildSnackBar(errorMessage);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+  }
+
+  SnackBar buildSnackBar(String message) {
+    return SnackBar(
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
+      margin: const EdgeInsetsDirectional.all(8),
+      content: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Icon(
+              Icons.warning,
+              color: Colors.red,
+            ),
+            Text(message),
+          ],
+        ),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      behavior: SnackBarBehavior.floating,
+      elevation: 4.0,
+      clipBehavior: Clip.hardEdge,
+      dismissDirection: DismissDirection.horizontal,
     );
   }
 }
