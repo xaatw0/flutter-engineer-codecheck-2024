@@ -3,6 +3,7 @@ import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modeless_drawer/modeless_drawer.dart';
+import 'package:github_browser_app/gen_l10n/app_localizations.dart';
 
 import 'search_repositories_state.dart';
 

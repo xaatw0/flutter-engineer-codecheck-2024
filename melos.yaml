@@ -15,7 +15,7 @@ scripts:
   build_watch:
     run: melos exec  --depends-on="build_runner" -- fvm dart run build_runner watch --delete-conflicting-outputs
   gen-l10n:
-    run: melos exec  --depends-on="intl" -- fvm flutter gen-l10n --no-nullable-getter  --untranslated-messages-file l10n_missing_keywords.txt
+    run: melos exec  --depends-on="intl" --  fvm flutter gen-l10n  --no-nullable-getter  --no-synthetic-package --arb-dir l10n --output-dir ./lib/gen_l10n   --untranslated-messages-file l10n_missing_keywords.txt
 
   init:
     run: melos bs && melos gen-l10n && melos build_runner

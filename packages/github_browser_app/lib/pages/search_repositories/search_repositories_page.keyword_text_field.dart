@@ -15,7 +15,7 @@ class _KeywordTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: 'Input search word',
+        hintText: AppLocalizations.of(context).inputSearchWord,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(32),
         ),
