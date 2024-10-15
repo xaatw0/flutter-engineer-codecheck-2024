@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
 import 'package:domain/service_locator.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:infrastructure/github_git_repository/data/github_search_repositories_data.dart';
 
@@ -34,7 +35,7 @@ class GithubGitRepository {
     if (message != null) {
       catchExceptionFromGithub(message);
     }
-    return GithubSearchRepositoriesData.fromJson(json);
+    return compute(GithubSearchRepositoriesData.fromJson, json);
   }
 
   void catchNetworkException(Object ex) {
