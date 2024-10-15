@@ -39,15 +39,10 @@ class SearchRepositoriesPage extends ConsumerWidget {
                           onChanged: ref
                               .read(searchRepositoriesStateProvider.notifier)
                               .changeKeyword,
-                          onSubmitted: () => showSnackBarWhenCatchException(
-                            context,
-                            () => ref
-                                .read(searchRepositoriesStateProvider.notifier)
-                                .loadRepositories(),
-                            onError: ref
-                                .read(searchRepositoriesStateProvider.notifier)
-                                .reset,
-                          ),
+                          onSubmitted: () => onSearch(
+                              context,
+                              ref.read(
+                                  searchRepositoriesStateProvider.notifier)),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -62,16 +57,10 @@ class SearchRepositoriesPage extends ConsumerWidget {
                           onReset: () => ref
                               .read(searchRepositoriesStateProvider.notifier)
                               .reset(),
-                          onSearch: () => showSnackBarWhenCatchException(
+                          onSearch: () => onSearch(
                               context,
-                              () => ref
-                                  .read(
-                                      searchRepositoriesStateProvider.notifier)
-                                  .loadRepositories(),
-                              onError: ref
-                                  .read(
-                                      searchRepositoriesStateProvider.notifier)
-                                  .reset),
+                              ref.read(
+                                  searchRepositoriesStateProvider.notifier)),
                         ),
                       ),
                     ],
@@ -150,6 +139,14 @@ class SearchRepositoriesPage extends ConsumerWidget {
       elevation: 4.0,
       clipBehavior: Clip.hardEdge,
       dismissDirection: DismissDirection.horizontal,
+    );
+  }
+
+  void onSearch(BuildContext context, SearchRepositoriesState notifier) {
+    showSnackBarWhenCatchException(
+      context,
+      () => notifier.loadRepositories(),
+      onError: notifier.reset,
     );
   }
 }
