@@ -44,6 +44,9 @@ class SearchRepositoriesPage extends ConsumerWidget {
                             () => ref
                                 .read(searchRepositoriesStateProvider.notifier)
                                 .loadRepositories(),
+                            onError: ref
+                                .read(searchRepositoriesStateProvider.notifier)
+                                .reset,
                           ),
                         ),
                       ),
@@ -60,11 +63,15 @@ class SearchRepositoriesPage extends ConsumerWidget {
                               .read(searchRepositoriesStateProvider.notifier)
                               .reset(),
                           onSearch: () => showSnackBarWhenCatchException(
-                            context,
-                            () => ref
-                                .read(searchRepositoriesStateProvider.notifier)
-                                .loadRepositories(),
-                          ),
+                              context,
+                              () => ref
+                                  .read(
+                                      searchRepositoriesStateProvider.notifier)
+                                  .loadRepositories(),
+                              onError: ref
+                                  .read(
+                                      searchRepositoriesStateProvider.notifier)
+                                  .reset),
                         ),
                       ),
                     ],
@@ -108,15 +115,17 @@ class SearchRepositoriesPage extends ConsumerWidget {
 
   void showSnackBarWhenCatchException(
     BuildContext context,
-    Future<void> Function() funcLoading,
-  ) {
-    funcLoading().catchError((onError) {
-      final errorMessage = onError is ExceptionsWhenLoadingRepositories
-          ? onError.message
-          : onError.toString();
+    Future<void> Function() funcLoading, {
+    required void Function() onError,
+  }) {
+    funcLoading().catchError((ex) {
+      final errorMessage =
+          ex is ExceptionsWhenLoadingRepositories ? ex.message : ex.toString();
 
       final snackBar = buildSnackBar(errorMessage);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      onError();
     });
   }
 
