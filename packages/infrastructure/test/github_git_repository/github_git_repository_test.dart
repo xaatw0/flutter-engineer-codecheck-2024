@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
 import 'package:domain/service_locator.dart';
 import 'package:domain/use_case/use_case_list.dart';
 import 'package:http/http.dart' as http;
@@ -74,5 +75,19 @@ void main() {
     verify(mockHttpClient.get(Uri.parse(
             'https://api.github.com/search/repositories?q=flutter&page=2')))
         .called(1);
+  });
+
+  test('例外', () {
+    final target = GithubGitRepository();
+
+    expect(
+        () => target.catchNetworkException(
+            http.ClientException("Failed host lookup: 'api.github.com'")),
+        throwsA(isA<NoHostException>()));
+
+    expect(
+        () => target.catchNetworkException(
+            http.ClientException("Failed host lookup: 'api.github.com'")),
+        throwsA(isA<NoHostException>()));
   });
 }
