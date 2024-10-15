@@ -16,10 +16,16 @@ class SearchRepositoriesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(searchRepositoriesStateProvider).isLoading;
-    final items = ref.watch(searchRepositoriesStateProvider).entities;
+    // watch対象
+    final isLoading =
+        ref.watch(searchRepositoriesStateProvider.select((e) => e.isLoading));
+    final isSearched =
+        ref.watch(searchRepositoriesStateProvider.select((e) => e.isSearched));
+    final isKeywordEmpty = ref.watch(
+        searchRepositoriesStateProvider.select((e) => e.keyword.isEmpty));
 
-    final isSearched = ref.read(searchRepositoriesStateProvider).isSearched;
+    // 追加前後にisLoadingが変更、リセット時にisSearchedがfalseになるので、watchする必要がない
+    final items = ref.read(searchRepositoriesStateProvider).entities;
 
     final _kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
 
@@ -50,10 +56,7 @@ class SearchRepositoriesPage extends ConsumerWidget {
                         radius: 32,
                         child: _SearchCancelButton(
                           isSearched: isSearched,
-                          isKeywordEmpty: ref
-                              .read(searchRepositoriesStateProvider)
-                              .keyword
-                              .isEmpty,
+                          isKeywordEmpty: isKeywordEmpty,
                           onReset: () => ref
                               .read(searchRepositoriesStateProvider.notifier)
                               .reset(),
