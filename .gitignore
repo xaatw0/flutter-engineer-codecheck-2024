@@ -27,3 +27,8 @@ doc/api/
 .flutter-plugins-dependencies
 
 /.fvm/
+
+## 自動生成
+/packages/**/*.mocks.dart
+/packages/**/*.g.dart
+/packages/github_browser_app/lib/gen_l10n/
