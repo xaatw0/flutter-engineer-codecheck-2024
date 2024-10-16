@@ -35,6 +35,12 @@ jobs:
           fvm use --force
           melos init
 
+      - name: flutter analyze
+        run: melos analyze
+
+      - name: flutter test
+        run: melos test
+
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
