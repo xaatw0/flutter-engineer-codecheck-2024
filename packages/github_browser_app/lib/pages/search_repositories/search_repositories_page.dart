@@ -2,6 +2,7 @@ import 'package:domain/entities/git_repository_entity.dart';
 import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser_app/extensions/responsive_extension.dart';
 import 'package:modeless_drawer/modeless_drawer.dart';
 import 'package:github_browser_app/gen_l10n/app_localizations.dart';
 
@@ -29,6 +30,16 @@ class SearchRepositoriesPage extends ConsumerWidget {
     final items = ref.read(searchRepositoriesStateProvider).entities;
 
     final _kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
+
+    // ウィンドウ幅が大きくなるにしたがって、タイルの数を増やす。
+    // タイルを4列表示時でさらに広いようであれば、横に空白を作る
+    final maxTileSize = WindowSize.medium.breakpoint * 4 / 5;
+    final windowWidth = MediaQuery.sizeOf(context).width;
+    final gridCrossAxisCount =
+        context.responsive(1, medium: 2, large: 3, xLarge: 4);
+    final gridPadding = maxTileSize * gridCrossAxisCount > windowWidth
+        ? 0.0
+        : (windowWidth - maxTileSize * gridCrossAxisCount) / 2;
 
     return Scaffold(
       body: SafeArea(
@@ -71,32 +82,39 @@ class SearchRepositoriesPage extends ConsumerWidget {
                   ),
                 ),
                 Expanded(
-                    child: NotificationListener(
-                  onNotification: (ScrollEndNotification notification) {
-                    final isScrollToEnd = notification.metrics.extentAfter == 0;
+                  child: NotificationListener(
+                    onNotification: (ScrollEndNotification notification) {
+                      final isScrollToEnd =
+                          notification.metrics.extentAfter == 0;
 
-                    if (isScrollToEnd) {
-                      ref
-                          .read(searchRepositoriesStateProvider.notifier)
-                          .loadRepositories();
-                    }
-                    return false;
-                  },
-                  child: ListView.builder(
-                      itemCount: items.length + (isLoading ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == items.length) {
-                          return SizedBox.square(
-                              dimension: 32.0,
-                              child: const CircularProgressIndicator());
-                        }
-
-                        return _RepositoryTile(
-                          kerDrawer: _kerDrawer,
-                          item: items[index],
-                        );
-                      }),
-                )),
+                      if (isScrollToEnd) {
+                        ref
+                            .read(searchRepositoriesStateProvider.notifier)
+                            .loadRepositories();
+                      }
+                      return false;
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: gridPadding),
+                      child: GridView.builder(
+                          itemCount: items.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: gridCrossAxisCount,
+                            childAspectRatio: 4.5 / 1,
+                          ),
+                          itemBuilder: (context, index) {
+                            return _RepositoryTile(
+                              kerDrawer: _kerDrawer,
+                              item: items[index],
+                            );
+                          }),
+                    ),
+                  ),
+                ),
+                if (isLoading)
+                  const SizedBox.square(
+                      dimension: 32.0, child: CircularProgressIndicator())
               ],
             ),
             _DetailDrawer(kerDrawer: _kerDrawer),

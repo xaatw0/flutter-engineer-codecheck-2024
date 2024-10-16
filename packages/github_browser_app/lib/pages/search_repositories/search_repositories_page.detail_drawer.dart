@@ -2,7 +2,6 @@ part of 'search_repositories_page.dart';
 
 class _DetailDrawer extends StatelessWidget {
   const _DetailDrawer({
-    super.key,
     required GlobalKey<ModelessDrawerState<GitRepositoryEntity>> kerDrawer,
   }) : _kerDrawer = kerDrawer;
 
@@ -15,7 +14,7 @@ class _DetailDrawer extends StatelessWidget {
         width: MediaQuery.sizeOf(context).width * 2 / 3,
         builder: (BuildContext context, GitRepositoryEntity? item) {
           if (item == null) {
-            return Text('No data');
+            return const Text('No data');
           }
 
           final pairs = [
@@ -38,14 +37,27 @@ class _DetailDrawer extends StatelessWidget {
               ),
               Text(item.authorName),
               const SizedBox(height: 16),
-              for (final (icon, count) in pairs) ...[
+              if (context.responsive(true, medium: false))
+                for (final (icon, count) in pairs) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(icon),
+                      Text('$count'),
+                    ],
+                  ),
+                ],
+              if (context.responsive(false, medium: true))
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(icon),
-                    Text('$count'),
+                    for (final (icon, count) in pairs) ...[
+                      Icon(icon),
+                      Text('$count'),
+                      const SizedBox(width: 8)
+                    ]
                   ],
                 ),
-              ],
               const SizedBox(height: 32),
               Text(item.description),
             ],
