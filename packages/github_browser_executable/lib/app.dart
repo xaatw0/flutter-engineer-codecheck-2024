@@ -1,0 +1,52 @@
+import 'package:domain/service_locator.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser_app/gen_l10n/app_localizations.dart';
+import 'package:github_browser_app/pages/search_repositories/search_repositories_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:use_case/github_use_case/github_use_case_list.dart';
+
+import 'flavors.dart';
+
+Future<void> main() async {
+  ServiceLocator.init(http.Client(), GithubUseCaseList());
+
+  run();
+}
+
+Widget _flavorBanner({
+  required Widget child,
+  bool show = true,
+}) =>
+    show
+        ? Banner(
+            child: child,
+            location: BannerLocation.topStart,
+            message: F.name,
+            color: Colors.green.withOpacity(0.6),
+            textStyle: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 12.0,
+                letterSpacing: 1.0),
+            textDirection: TextDirection.ltr,
+          )
+        : Container(
+            child: child,
+          );
+
+void run() {
+  runApp(
+    ProviderScope(
+      child: MaterialApp(
+        title: F.title,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: _flavorBanner(
+          child: const SearchRepositoriesPage(),
+          show: kDebugMode,
+        ),
+      ),
+    ),
+  );
+}
