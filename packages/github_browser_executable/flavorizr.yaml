@@ -1,0 +1,20 @@
+app:
+  android:
+    flavorDimensions: "flavor-type"
+
+flavors:
+
+  dev:
+    app:
+      name: "GithubBrowser(dev)"
+    android:
+      applicationId: "com.github.xaatw0.GithubBrowser.dev"
+    ios:
+      bundleId: "com.github.xaatw0.GithubBrowser.dev"
+  prod:
+    app:
+      name: "GithubBrowser"
+    android:
+      applicationId: "com.github.xaatw0.GithubBrowser.prod"
+    ios:
+      bundleId: "com.github.xaatw0.GithubBrowser.prod"
