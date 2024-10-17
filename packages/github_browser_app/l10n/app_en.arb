@@ -1,4 +1,17 @@
 {
   "@@locale":"en",
-  "inputSearchWord": "Input search word"
+  "inputSearchWord": "Input search word",
+  "resetConfirmation": "Do you want to reset?",
+  "repositoriesDeletedKeepKeyword": "Loaded repositories will be deleted, but {keyword} will be retained",
+    "@repositoriesDeletedKeepKeyword": {
+      "placeholders": {
+        "keyword": {
+          "type": "String",
+          "example": "flutter"
+        }
+      }
+    },
+  "cancelAction": "Cancel",
+  "resetAction": "Reset",
+  "end":"end"
 }

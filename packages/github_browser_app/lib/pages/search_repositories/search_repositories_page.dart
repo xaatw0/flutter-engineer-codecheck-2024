@@ -3,6 +3,7 @@ import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser_app/extensions/responsive_extension.dart';
+import 'package:github_browser_app/pages/search_repositories/ask_before_reset.dart';
 import 'package:modeless_drawer/modeless_drawer.dart';
 import 'package:github_browser_app/gen_l10n/app_localizations.dart';
 
@@ -13,7 +14,7 @@ part 'search_repositories_page.detail_drawer.dart';
 part 'search_repositories_page.keyword_text_field.dart';
 part 'search_repositories_page.search_cancel_button.dart';
 
-class SearchRepositoriesPage extends ConsumerWidget {
+class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
   const SearchRepositoriesPage({super.key});
 
   @override
@@ -71,7 +72,7 @@ class SearchRepositoriesPage extends ConsumerWidget {
                           isKeywordEmpty: isKeywordEmpty,
                           onReset: () => ref
                               .read(searchRepositoriesStateProvider.notifier)
-                              .reset(),
+                              .resetAfterAsk(this, context),
                           onSearch: () => onSearch(
                               context,
                               ref.read(
@@ -169,6 +170,28 @@ class SearchRepositoriesPage extends ConsumerWidget {
       context,
       () => notifier.loadRepositories(),
       onError: notifier.reset,
+    );
+  }
+
+  @override
+  Future<bool?> askIfReset(BuildContext context, String keyword) {
+    return showAdaptiveDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: Text(AppLocalizations.of(context).resetConfirmation),
+        content: Text(AppLocalizations.of(context)
+            .repositoriesDeletedKeepKeyword(keyword)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(AppLocalizations.of(context).cancelAction),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(AppLocalizations.of(context).resetAction),
+          ),
+        ],
+      ),
     );
   }
 }
