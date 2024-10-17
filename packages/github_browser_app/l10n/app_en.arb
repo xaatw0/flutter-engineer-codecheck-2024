@@ -13,5 +13,7 @@
     },
   "cancelAction": "Cancel",
   "resetAction": "Reset",
+  "repositorySearch": "Repository Search",
+  "settings": "Settings",
   "end":"end"
 }
