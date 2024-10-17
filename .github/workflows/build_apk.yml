@@ -35,15 +35,27 @@ jobs:
           fvm use --force
           melos init
 
-      - name: Set up JDK 17
+      - name: flutter analyze
+        run: melos analyze
+
+      - name: flutter test
+        run: melos test
+
+      - name: Set up JDK 21
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'adopt'
           cache: 'gradle'
 
-      - name: Build flutter apk
-        run: fvm flutter build apk --release -t lib/main.dart
+
+
+      - name: Build flutter apk for dev
+        run: fvm flutter build apk --release --flavor=dev -t lib/main_dev.dart
+        working-directory: ${{ env.APPLICATION_DIR }}
+
+      - name: Build flutter apk for prod
+        run:  fvm flutter build apk --release --flavor=prod -t lib/main_prod.dart
         working-directory: ${{ env.APPLICATION_DIR }}
 
 
