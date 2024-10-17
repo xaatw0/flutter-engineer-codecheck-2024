@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser_app/gen_l10n/app_localizations.dart';
+import 'package:github_browser_app/route/app_state.dart';
 import 'package:github_browser_app/route/router.dart';
 import 'package:http/http.dart' as http;
 import 'package:use_case/github_use_case/github_use_case_list.dart';
@@ -38,16 +39,21 @@ Widget _flavorBanner({
 void run() {
   runApp(
     ProviderScope(
-      child: MaterialApp.router(
-        title: F.title,
-        routerConfig: router,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        builder: (context, child) => _flavorBanner(
-          show: kDebugMode,
-          child: child ?? Container(),
-        ),
-      ),
+      child: Consumer(builder: (context, ref, _) {
+        return MaterialApp.router(
+          title: F.title,
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          themeMode: ref.watch(appStateProvider.select((e) => e.themeMode)),
+          theme: ThemeData(),
+          darkTheme: ThemeData(brightness: Brightness.dark),
+          builder: (context, child) => _flavorBanner(
+            show: kDebugMode,
+            child: child ?? Container(),
+          ),
+        );
+      }),
     ),
   );
 }

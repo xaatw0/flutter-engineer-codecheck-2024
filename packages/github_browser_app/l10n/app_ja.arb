@@ -5,7 +5,14 @@
   "repositoriesDeletedKeepKeyword": "読み込んだレポジトリは削除されますが、{keyword}は維持されます",
   "cancelAction": "キャンセルする",
   "resetAction": "リセットする",
+
   "repositorySearch": "レポジトリ検索",
   "settings": "設定",
+
+  "themeMode": "テーマモード",
+  "system": "システム",
+  "light": "ライト",
+  "dark": "ダーク",
+
   "end":"end"
 }

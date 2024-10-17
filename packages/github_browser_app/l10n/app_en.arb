@@ -13,7 +13,14 @@
     },
   "cancelAction": "Cancel",
   "resetAction": "Reset",
+
   "repositorySearch": "Repository Search",
   "settings": "Settings",
+
+  "themeMode": "Theme Mode",
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark",
+
   "end":"end"
 }
