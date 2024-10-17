@@ -1,5 +1,7 @@
 import 'package:domain/service_locator.dart';
 import 'package:domain/use_case/search_repositories_use_case.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:github_browser_app/pages/search_repositories/ask_before_reset.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'search_repositories_model.dart';
@@ -11,7 +13,7 @@ class SearchRepositoriesState extends _$SearchRepositoriesState {
       ServiceLocator.singleton().useCaseList.getSearchRepositoriesUseCase();
 
   @override
-  SearchRepositoriesModel build() => SearchRepositoriesModel(
+  SearchRepositoriesModel build() => const SearchRepositoriesModel(
         keyword: '',
         isSearched: false,
         page: 1,
@@ -41,5 +43,22 @@ class SearchRepositoriesState extends _$SearchRepositoriesState {
       isLoading: false,
       entities: [...state.entities, ...repositories],
     );
+  }
+
+  Future<void> resetAfterAsk(
+      AskIfReset humbleObject, BuildContext context) async {
+    // レポジトリ読み込み中は、キャンセルできないとする
+    if (state.isLoading) {
+      return;
+    }
+
+    final result = await humbleObject.askIfReset(
+      context,
+      state.keyword,
+    );
+
+    if (result == true) {
+      reset();
+    }
   }
 }

@@ -1,4 +1,9 @@
 {
   "@@locale":"ja",
-  "inputSearchWord": "検索ワードを入れてください"
+  "inputSearchWord": "検索ワードを入れてください",
+  "resetConfirmation": "リセットしますか",
+  "repositoriesDeletedKeepKeyword": "読み込んだレポジトリは削除されますが、{keyword}は維持されます",
+  "cancelAction": "キャンセルする",
+  "resetAction": "リセットする",
+  "end":"end"
 }
