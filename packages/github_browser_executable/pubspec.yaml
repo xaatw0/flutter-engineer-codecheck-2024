@@ -16,6 +16,7 @@ dependencies:
   use_case:
     path: ../use_case
   http: ^1.2.2
+  dynamic_color: ^1.7.0
 
 dev_dependencies:
   flutter_test:

@@ -11,26 +11,35 @@ class AppModel {
   /// 選択されたナビゲーターのインデックス（null不許可）
   final int selectedNavigatorIndex;
 
+  /// アプリ全体のカラースキームのベース
   final AppThemeColor appThemeColor;
+
+  /// MaterialYouが有効か<br/>
+  /// true: 有効 false:無効
+  final bool isMaterialYouAvailable;
 
   /// 全てのフィールドを含むコンストラクタ
   AppModel({
     required this.themeMode,
     required this.selectedNavigatorIndex,
     required this.appThemeColor,
+    required this.isMaterialYouAvailable,
   });
 
-  /// 新しい値でインスタンスをコピーする（themeModeは変更不可）
+  /// 新しい値でインスタンスをコピーする
   AppModel copyWith({
     int? selectedNavigatorIndex,
     ThemeMode? themeMode,
     AppThemeColor? appThemeColor,
+    bool? isMaterialYouAvailable,
   }) {
     return AppModel(
       themeMode: themeMode ?? this.themeMode,
       selectedNavigatorIndex:
           selectedNavigatorIndex ?? this.selectedNavigatorIndex,
       appThemeColor: appThemeColor ?? this.appThemeColor,
+      isMaterialYouAvailable:
+          isMaterialYouAvailable ?? this.isMaterialYouAvailable,
     );
   }
 }

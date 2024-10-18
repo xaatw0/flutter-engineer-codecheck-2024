@@ -14,6 +14,9 @@ class SettingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isMaterialYouAvailable =
+        ref.read(appStateProvider).isMaterialYouAvailable;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
       child: Column(
@@ -39,26 +42,36 @@ class SettingPage extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
 
-          // メインカラー
+          // テーマカラー
           AppText.caption(AppLocalizations.of(context).themeColor),
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              for (final appThemeColor in AppThemeColor.values)
+              for (final appThemeColor in AppThemeColor.values.where(
+                // MaterialYouは対応時のみ、その他の色は常に表示する
+                (e) => e != AppThemeColor.materialYou || isMaterialYouAvailable,
+              ))
                 IconButton(
                   onPressed: () {
                     ref
                         .read(appStateProvider.notifier)
                         .changeAppThemeColor(appThemeColor);
                   },
-                  icon: Icon(
-                    ref.watch(appStateProvider
-                                .select((e) => e.appThemeColor)) ==
-                            appThemeColor
+                  icon: Builder(builder: (context) {
+                    final currentColor = ref
+                        .watch(appStateProvider.select((e) => e.appThemeColor));
+                    final iconData = currentColor == appThemeColor
                         ? Icons.circle
-                        : Icons.circle_outlined,
-                    size: 32,
-                    color: appThemeColor.color,
-                  ),
+                        : appThemeColor == AppThemeColor.materialYou
+                            ? Icons.face
+                            : Icons.circle_outlined;
+
+                    final color = appThemeColor == AppThemeColor.materialYou
+                        ? Theme.of(context).colorScheme.primary
+                        : appThemeColor.color;
+
+                    return Icon(iconData, size: 32, color: color);
+                  }),
                 ),
             ],
           ),

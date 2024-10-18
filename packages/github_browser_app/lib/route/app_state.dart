@@ -13,17 +13,27 @@ class AppState extends _$AppState {
         themeMode: ThemeMode.system,
         selectedNavigatorIndex: 0,
         appThemeColor: AppThemeColor.magenta,
+        isMaterialYouAvailable: false,
       );
 
+  /// ライトモード・ダークモードの変更
   void changeThemeMode(ThemeMode themeMode) {
     state = state.copyWith(themeMode: themeMode);
   }
 
+  /// bottomNavigationBarの選択された項目のインデックス
   void changeNavigatorIndex(int index) {
     state = state.copyWith(selectedNavigatorIndex: index);
   }
 
+  /// 選択されたアプリのテーマカラーのベースカラー
   void changeAppThemeColor(AppThemeColor appThemeColor) {
     state = state.copyWith(appThemeColor: appThemeColor);
+  }
+
+  /// MaterialYouが対応か
+  /// true: 対応 false:非対応
+  void changeMaterialYouAvailable(bool isMaterialYouAvailable) {
+    state = state.copyWith(isMaterialYouAvailable: isMaterialYouAvailable);
   }
 }

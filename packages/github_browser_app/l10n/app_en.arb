@@ -29,6 +29,7 @@
   "yellow": "Yellow",
   "magenta": "Magenta",
   "cyan": "Cyan",
+  "materialYou":"materialYou",
 
   "end":"end"
 }
