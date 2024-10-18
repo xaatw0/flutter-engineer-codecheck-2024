@@ -10,7 +10,7 @@ class SearchRepositoriesModel {
   /// 検索開始
   final bool isSearched;
 
-  /// ページ
+  /// 検索対象のページが何番目か
   final int page;
 
   /// ローディング状態

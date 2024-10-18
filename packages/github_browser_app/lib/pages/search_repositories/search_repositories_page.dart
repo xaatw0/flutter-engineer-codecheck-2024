@@ -17,6 +17,8 @@ part 'search_repositories_page.search_cancel_button.dart';
 class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
   const SearchRepositoriesPage({super.key});
 
+  static const path = '/search_repositories';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // watch対象

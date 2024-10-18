@@ -5,5 +5,23 @@
   "repositoriesDeletedKeepKeyword": "読み込んだレポジトリは削除されますが、{keyword}は維持されます",
   "cancelAction": "キャンセルする",
   "resetAction": "リセットする",
+
+  "repositorySearch": "レポジトリ検索",
+  "settings": "設定",
+
+  "themeMode": "テーマモード",
+  "system": "システム",
+  "light": "ライト",
+  "dark": "ダーク",
+
+  "themeColor": "テーマカラー",
+  "red": "赤",
+  "green": "緑",
+  "blue": "青",
+  "yellow": "黄色",
+  "magenta": "マゼンダ",
+  "cyan": "シアン",
+  "materialYou":"materialYou",
+
   "end":"end"
 }

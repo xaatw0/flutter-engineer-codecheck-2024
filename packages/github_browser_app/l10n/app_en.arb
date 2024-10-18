@@ -13,5 +13,23 @@
     },
   "cancelAction": "Cancel",
   "resetAction": "Reset",
+
+  "repositorySearch": "Repository Search",
+  "settings": "Settings",
+
+  "themeMode": "Theme Mode",
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark",
+
+  "themeColor": "Theme Color",
+  "red": "Red",
+  "green": "Green",
+  "blue": "Blue",
+  "yellow": "Yellow",
+  "magenta": "Magenta",
+  "cyan": "Cyan",
+  "materialYou":"materialYou",
+
   "end":"end"
 }
