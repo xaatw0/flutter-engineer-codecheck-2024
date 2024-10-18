@@ -51,35 +51,39 @@ class SettingPage extends ConsumerWidget {
                 // MaterialYouは対応時のみ、その他の色は常に表示する
                 (e) => e != AppThemeColor.materialYou || isMaterialYouAvailable,
               ))
-                Tooltip(
-                  message: appThemeColor.getTitle(AppLocalizations.of(context)),
-                  decoration: BoxDecoration(
-                    color: appThemeColor.displayColor ??
-                        getMaterialYouColor(context, ref),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: IconButton(
-                    onPressed: () {
-                      ref
-                          .read(appStateProvider.notifier)
-                          .changeAppThemeColor(appThemeColor);
-                    },
-                    icon: Builder(builder: (context) {
-                      final currentColor = ref.watch(
-                          appStateProvider.select((e) => e.appThemeColor));
-                      final iconData = currentColor == appThemeColor
-                          ? Icons.circle
-                          : appThemeColor == AppThemeColor.materialYou
-                              ? Icons.face
-                              : Icons.circle_outlined;
+                Builder(builder: (context) {
+                  // テーマカラーの選択肢を表す丸とツールチップの色
+                  final displayColor = appThemeColor.displayColor ??
+                      getMaterialYouColor(context, ref);
 
-                      final color = appThemeColor.displayColor ??
-                          getMaterialYouColor(context, ref);
+                  // テーマカラーが変更になると再描画が必要なため、現在の色はwatch対象
+                  final currentColor = ref
+                      .watch(appStateProvider.select((e) => e.appThemeColor));
 
-                      return Icon(iconData, size: 32, color: color);
-                    }),
-                  ),
-                ),
+                  // 選択されているかでアイコンが変わる。MaterialYouはFaceになる
+                  final iconData = currentColor == appThemeColor
+                      ? Icons.circle
+                      : appThemeColor == AppThemeColor.materialYou
+                          ? Icons.face
+                          : Icons.circle_outlined;
+
+                  return Tooltip(
+                    message:
+                        appThemeColor.getTitle(AppLocalizations.of(context)),
+                    decoration: BoxDecoration(
+                      color: displayColor,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        ref
+                            .read(appStateProvider.notifier)
+                            .changeAppThemeColor(appThemeColor);
+                      },
+                      icon: Icon(iconData, size: 32, color: displayColor),
+                    ),
+                  );
+                }),
             ],
           ),
         ],
