@@ -5,6 +5,8 @@ import 'package:github_browser_app/route/app_state.dart';
 import 'package:github_browser_app/route/router.dart';
 import 'package:go_router/go_router.dart';
 
+/// 画面のフレームワーク<br/>
+/// タイトルとボトムナビゲーションバーを共通で設定
 class NonAuthenticatedTemplate extends ConsumerWidget {
   const NonAuthenticatedTemplate({
     super.key,

@@ -7,12 +7,14 @@ import 'package:github_browser_app/widgets/templates/non_authenticated_template.
 import 'package:go_router/go_router.dart';
 
 final pathInfoList = [
+  // 検索画面
   PathInfo(
     SearchRepositoriesPage.path,
     SearchRepositoriesPage(),
     Icons.search,
     (appLoc) => appLoc.repositorySearch,
   ),
+  // 設定画面
   PathInfo(
     SettingPage.path,
     SettingPage(),
