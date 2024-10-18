@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser_app/extensions/responsive_extension.dart';
 import 'package:github_browser_app/pages/search_repositories/ask_before_reset.dart';
+import 'package:github_browser_app/widgets/molecules/loading_indicator.dart';
 import 'package:modeless_drawer/modeless_drawer.dart';
 import 'package:github_browser_app/gen_l10n/app_localizations.dart';
 
@@ -115,9 +116,7 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                     ),
                   ),
                 ),
-                if (isLoading)
-                  const SizedBox.square(
-                      dimension: 32.0, child: CircularProgressIndicator())
+                if (isLoading) LoadingIndicator(),
               ],
             ),
             _DetailDrawer(kerDrawer: _kerDrawer),
