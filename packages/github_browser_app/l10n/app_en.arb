@@ -22,5 +22,13 @@
   "light": "Light",
   "dark": "Dark",
 
+  "themeColor": "Theme Color",
+  "red": "Red",
+  "green": "Green",
+  "blue": "Blue",
+  "yellow": "Yellow",
+  "magenta": "Magenta",
+  "cyan": "Cyan",
+
   "end":"end"
 }

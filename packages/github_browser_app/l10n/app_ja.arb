@@ -14,5 +14,13 @@
   "light": "ライト",
   "dark": "ダーク",
 
+  "themeColor": "テーマカラー",
+  "red": "赤",
+  "green": "緑",
+  "blue": "青",
+  "yellow": "黄色",
+  "magenta": "マゼンダ",
+  "cyan": "シアン",
+
   "end":"end"
 }

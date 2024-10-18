@@ -46,8 +46,15 @@ void run() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           themeMode: ref.watch(appStateProvider.select((e) => e.themeMode)),
-          theme: ThemeData(),
-          darkTheme: ThemeData(brightness: Brightness.dark),
+          theme: ThemeData(
+            colorSchemeSeed: ref
+                .watch(appStateProvider.select((e) => e.appThemeColor.color)),
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            colorSchemeSeed: ref
+                .watch(appStateProvider.select((e) => e.appThemeColor.color)),
+          ),
           builder: (context, child) => _flavorBanner(
             show: kDebugMode,
             child: child ?? Container(),

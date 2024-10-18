@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:github_browser_app/route/app_theme_color.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'app_model.dart';
@@ -8,8 +9,11 @@ part 'app_state.g.dart';
 @Riverpod(keepAlive: true)
 class AppState extends _$AppState {
   @override
-  AppModel build() =>
-      AppModel(themeMode: ThemeMode.system, selectedNavigatorIndex: 0);
+  AppModel build() => AppModel(
+        themeMode: ThemeMode.system,
+        selectedNavigatorIndex: 0,
+        appThemeColor: AppThemeColor.magenta,
+      );
 
   void changeThemeMode(ThemeMode themeMode) {
     state = state.copyWith(themeMode: themeMode);
@@ -17,5 +21,9 @@ class AppState extends _$AppState {
 
   void changeNavigatorIndex(int index) {
     state = state.copyWith(selectedNavigatorIndex: index);
+  }
+
+  void changeAppThemeColor(AppThemeColor appThemeColor) {
+    state = state.copyWith(appThemeColor: appThemeColor);
   }
 }
