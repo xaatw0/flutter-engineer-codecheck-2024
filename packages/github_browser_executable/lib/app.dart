@@ -45,13 +45,18 @@ void run() {
         return DynamicColorBuilder(
             builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
           // Material You 対応時は非null、 非対応時はnullになる
+          // 対応していれば、ベースカラーを保存する
           final isMaterialYouAvailable = lightDynamic != null;
+          if (isMaterialYouAvailable) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ref
+                  .read(appStateProvider.notifier)
+                  .changeMaterialYouAvailable(isMaterialYouAvailable);
 
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            ref
-                .read(appStateProvider.notifier)
-                .changeMaterialYouAvailable(isMaterialYouAvailable);
-          });
+              ref.read(appStateProvider.notifier).changeMaterialYouColor(
+                  lightDynamic.primary, darkDynamic?.primary);
+            });
+          }
 
           // 設定画面でテーマカラーが変更された場合、全ての画面で変更があるので、watch対象になる
           final selectedThemeColor =

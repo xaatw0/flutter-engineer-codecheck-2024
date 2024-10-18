@@ -51,32 +51,46 @@ class SettingPage extends ConsumerWidget {
                 // MaterialYouは対応時のみ、その他の色は常に表示する
                 (e) => e != AppThemeColor.materialYou || isMaterialYouAvailable,
               ))
-                IconButton(
-                  onPressed: () {
-                    ref
-                        .read(appStateProvider.notifier)
-                        .changeAppThemeColor(appThemeColor);
-                  },
-                  icon: Builder(builder: (context) {
-                    final currentColor = ref
-                        .watch(appStateProvider.select((e) => e.appThemeColor));
-                    final iconData = currentColor == appThemeColor
-                        ? Icons.circle
-                        : appThemeColor == AppThemeColor.materialYou
-                            ? Icons.face
-                            : Icons.circle_outlined;
+                Tooltip(
+                  message: appThemeColor.getTitle(AppLocalizations.of(context)),
+                  decoration: BoxDecoration(
+                    color: appThemeColor.displayColor ??
+                        getMaterialYouColor(context, ref),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      ref
+                          .read(appStateProvider.notifier)
+                          .changeAppThemeColor(appThemeColor);
+                    },
+                    icon: Builder(builder: (context) {
+                      final currentColor = ref.watch(
+                          appStateProvider.select((e) => e.appThemeColor));
+                      final iconData = currentColor == appThemeColor
+                          ? Icons.circle
+                          : appThemeColor == AppThemeColor.materialYou
+                              ? Icons.face
+                              : Icons.circle_outlined;
 
-                    final color = appThemeColor == AppThemeColor.materialYou
-                        ? Theme.of(context).colorScheme.primary
-                        : appThemeColor.color;
+                      final color = appThemeColor.displayColor ??
+                          getMaterialYouColor(context, ref);
 
-                    return Icon(iconData, size: 32, color: color);
-                  }),
+                      return Icon(iconData, size: 32, color: color);
+                    }),
+                  ),
                 ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  /// MaterialYouのプライマリーカラーを取得する
+  Color? getMaterialYouColor(BuildContext context, WidgetRef ref) {
+    return Theme.of(context).brightness == Brightness.light
+        ? ref.read(appStateProvider).lightMaterialYouColor
+        : ref.read(appStateProvider).dartMaterialYouColor;
   }
 }

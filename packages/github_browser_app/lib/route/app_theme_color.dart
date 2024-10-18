@@ -14,6 +14,8 @@ enum AppThemeColor {
 
   const AppThemeColor(this.color);
   final Color color;
+
+  Color? get displayColor => color == Colors.transparent ? null : color;
 }
 
 /// アプリのテーマカラーに対するタイトル

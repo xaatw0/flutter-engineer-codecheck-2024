@@ -18,12 +18,20 @@ class AppModel {
   /// true: 有効 false:無効
   final bool isMaterialYouAvailable;
 
+  /// ライトモード時のMaterialYou時のプライマリーカラー
+  final Color? lightMaterialYouColor;
+
+  /// ダークモード時のMaterialYou時のプライマリーカラー
+  final Color? dartMaterialYouColor;
+
   /// 全てのフィールドを含むコンストラクタ
   AppModel({
     required this.themeMode,
     required this.selectedNavigatorIndex,
     required this.appThemeColor,
     required this.isMaterialYouAvailable,
+    required this.lightMaterialYouColor,
+    required this.dartMaterialYouColor,
   });
 
   /// 新しい値でインスタンスをコピーする
@@ -32,6 +40,8 @@ class AppModel {
     ThemeMode? themeMode,
     AppThemeColor? appThemeColor,
     bool? isMaterialYouAvailable,
+    Color? lightMaterialYouColor,
+    Color? dartMaterialYouColor,
   }) {
     return AppModel(
       themeMode: themeMode ?? this.themeMode,
@@ -40,6 +50,9 @@ class AppModel {
       appThemeColor: appThemeColor ?? this.appThemeColor,
       isMaterialYouAvailable:
           isMaterialYouAvailable ?? this.isMaterialYouAvailable,
+      lightMaterialYouColor:
+          lightMaterialYouColor ?? this.lightMaterialYouColor,
+      dartMaterialYouColor: dartMaterialYouColor ?? this.dartMaterialYouColor,
     );
   }
 }

@@ -14,6 +14,8 @@ class AppState extends _$AppState {
         selectedNavigatorIndex: 0,
         appThemeColor: AppThemeColor.magenta,
         isMaterialYouAvailable: false,
+        lightMaterialYouColor: null,
+        dartMaterialYouColor: null,
       );
 
   /// ライトモード・ダークモードの変更
@@ -21,19 +23,28 @@ class AppState extends _$AppState {
     state = state.copyWith(themeMode: themeMode);
   }
 
-  /// bottomNavigationBarの選択された項目のインデックス
+  /// bottomNavigationBarの選択された項目のインデックスを変更
   void changeNavigatorIndex(int index) {
     state = state.copyWith(selectedNavigatorIndex: index);
   }
 
-  /// 選択されたアプリのテーマカラーのベースカラー
+  /// 選択されたアプリのテーマカラーのベースカラーを変更
   void changeAppThemeColor(AppThemeColor appThemeColor) {
     state = state.copyWith(appThemeColor: appThemeColor);
   }
 
-  /// MaterialYouが対応か
+  /// MaterialYouが対応かを設定<br/>
   /// true: 対応 false:非対応
   void changeMaterialYouAvailable(bool isMaterialYouAvailable) {
     state = state.copyWith(isMaterialYouAvailable: isMaterialYouAvailable);
+  }
+
+  /// MaterialYou時のプライマリーカラーを設定
+  void changeMaterialYouColor(
+      Color? lightMaterialYouColor, Color? dartMaterialYouColor) {
+    state = state.copyWith(
+      lightMaterialYouColor: lightMaterialYouColor,
+      dartMaterialYouColor: dartMaterialYouColor,
+    );
   }
 }
