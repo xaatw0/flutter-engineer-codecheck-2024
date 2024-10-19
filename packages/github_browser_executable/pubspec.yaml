@@ -7,8 +7,6 @@ environment:
   sdk: ^3.5.0
 
 dependencies:
-  flutter:
-    sdk: flutter
   domain:
     path: ../domain
   github_browser_app:
