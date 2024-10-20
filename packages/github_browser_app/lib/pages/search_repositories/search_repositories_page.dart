@@ -2,6 +2,7 @@ import 'package:domain/entities/git_repository_entity.dart';
 import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser_app/extensions/exceptions_when_loading_repositories_extensions.dart';
 import 'package:github_browser_app/extensions/responsive_extension.dart';
 import 'package:github_browser_app/pages/search_repositories/ask_before_reset.dart';
 import 'package:github_browser_app/widgets/molecules/loading_indicator.dart';
@@ -111,12 +112,14 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
     required void Function() onError,
   }) {
     funcLoading().catchError((ex) {
-      final errorMessage =
-          ex is ExceptionsWhenLoadingRepositories ? ex.message : ex.toString();
+      if (context.mounted) {
+        final errorMessage = ex is ExceptionsWhenLoadingRepositories
+            ? ex.getMessage(AppLocalizations.of(context))
+            : ex.toString();
 
-      final snackBar = buildSnackBar(errorMessage);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+        final snackBar = buildSnackBar(errorMessage);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
       onError();
     });
   }
