@@ -29,6 +29,15 @@ melos run_prod
 - dev: 開発用のFlavorでGithubに接続して実行
 - prod: 製品版のFlavorでGithubに接続して実行
 
+一般的には、以下で実行
+```
+fvm flutter run --flavor=dev -t lib/main_dev.dart
+fvm flutter run --flavor=prod -t lib/main_prod.dart
+
+fvm flutter run --flavor=dev -t execute_with_dummy/main_with_dummy.dart
+fvm flutter run --flavor=dev -t execute_with_dummy/main_with_slow.dart
+```
+
 ## 開発のメモ
 以下に開発時のメモを残しました。ご参照いただけると幸いです。[ここ](developers_memo.md)
 
