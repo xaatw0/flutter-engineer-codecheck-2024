@@ -50,7 +50,7 @@ class SearchAndConfirmBox extends StatelessWidget {
               child: AppTextField(
                 controller: fieldTextEditingController,
                 focusNode: fieldFocusNode,
-                isSearched: isSearched,
+                isReadOnly: isSearched,
                 onChanged: (value) {
                   onChangeKeyword(value);
                 },

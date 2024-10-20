@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
   const AppTextField({
-    required this.isSearched,
+    required this.isReadOnly,
     required this.onChanged,
     required this.onSubmitted,
     this.hintText = '',
@@ -10,7 +10,7 @@ class AppTextField extends StatelessWidget {
     this.focusNode,
   });
 
-  final bool isSearched;
+  final bool isReadOnly;
   final void Function(String value) onChanged;
   final void Function() onSubmitted;
   final String hintText;
@@ -31,7 +31,7 @@ class AppTextField extends StatelessWidget {
       textInputAction: TextInputAction.search,
       onChanged: onChanged,
       onSubmitted: (_) => onSubmitted(),
-      readOnly: isSearched,
+      readOnly: isReadOnly,
     );
   }
 }

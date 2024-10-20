@@ -14,8 +14,6 @@ import 'search_repositories_state.dart';
 
 part 'search_repositories_page.repository_tile.dart';
 part 'search_repositories_page.detail_drawer.dart';
-part 'search_repositories_page.keyword_text_field.dart';
-part 'search_repositories_page.search_cancel_button.dart';
 
 class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
   SearchRepositoriesPage({super.key});
