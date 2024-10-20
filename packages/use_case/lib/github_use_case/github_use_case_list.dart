@@ -5,7 +5,7 @@ import 'package:use_case/github_use_case/github_search_repositories_use_case.dar
 import 'package:use_case/github_use_case/keyword_suggestions/search_repositories_keyword_suggestions_use_case.dart';
 
 class GithubUseCaseList implements UseCaseList {
-  late final _searchRepositoriesUseCase = GithubSearchRepositoriesUseCase();
+  late final _searchRepositoriesUseCase = const GithubSearchRepositoriesUseCase();
   late final _keywordSuggestionsUseCase =
       SearchRepositoriesKeywordSuggestionsUseCase();
   @override

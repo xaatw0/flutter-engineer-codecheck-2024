@@ -15,7 +15,7 @@ part 'search_repositories_page.repository_tile.dart';
 part 'search_repositories_page.detail_drawer.dart';
 
 class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
-  SearchRepositoriesPage({super.key});
+  const SearchRepositoriesPage({super.key});
 
   static const path = '/search_repositories';
 
@@ -29,7 +29,7 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
     final items =
         ref.watch(searchRepositoriesStateProvider.select((e) => e.entities));
 
-    final _kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
+    final kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
 
     // ウィンドウ幅が大きくなるにしたがって、タイルの数を増やす。
     // タイルを4列表示時でさらに広いようであれば、横に空白を作る
@@ -88,17 +88,17 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                           ),
                           itemBuilder: (context, index) {
                             return _RepositoryTile(
-                              kerDrawer: _kerDrawer,
+                              kerDrawer: kerDrawer,
                               item: items[index],
                             );
                           }),
                     ),
                   ),
                 ),
-                if (isLoading) LoadingIndicator(),
+                if (isLoading) const LoadingIndicator(),
               ],
             ),
-            _DetailDrawer(kerDrawer: _kerDrawer),
+            _DetailDrawer(kerDrawer: kerDrawer),
           ],
         ),
       ),
@@ -126,10 +126,10 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
       margin: const EdgeInsetsDirectional.all(8),
       content: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.warning,
               color: Colors.red,
             ),

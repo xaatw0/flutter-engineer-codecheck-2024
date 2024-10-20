@@ -10,16 +10,14 @@ sealed class ExceptionsWhenLoadingRepositories implements Exception {
 
 /// ネットワークに繋がっていない状態の時
 class NoHostException extends ExceptionsWhenLoadingRepositories {
-  NoHostException([String message = 'No network connection available.'])
-      : super(message);
+  NoHostException([super.message = 'No network connection available.']);
 }
 
 /// アクセスしすぎで、サーバから拒否されたとき
 class TooManyRequestsException extends ExceptionsWhenLoadingRepositories {
   TooManyRequestsException(
-      [String message =
-          'Too many requests. The server has rejected your request.'])
-      : super(message);
+      [super.message =
+          'Too many requests. The server has rejected your request.']);
 }
 
 /// 不正なデータを受け取ったとき

@@ -18,7 +18,7 @@ void main() {
       MockUseCaseList(),
     );
 
-    final target = GithubGitRepository();
+    const target = GithubGitRepository();
     final result = await target.searchRepositories('flutter', 1);
     expect(result.totalCount,
         greaterThanOrEqualTo(750330)); // flutterのレポジトリが増えている前提
