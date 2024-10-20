@@ -15,18 +15,27 @@ class SearchCancelButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: 32,
-      child: IconButton(
-          onPressed: isSearched
-              ? onReset
-              : isKeywordEmpty
-                  ? null
-                  : onSearch,
-          icon: Icon(
-            isSearched ? Icons.cancel : Icons.search,
-            size: 32.0,
-          )),
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 300),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return ScaleTransition(
+            child: child,
+            scale: animation.drive(Tween<double>(begin: 1, end: 0.7)));
+      },
+      child: CircleAvatar(
+        radius: 32,
+        key: ValueKey<bool>(isSearched),
+        child: IconButton(
+            onPressed: isSearched
+                ? onReset
+                : isKeywordEmpty
+                    ? null
+                    : onSearch,
+            icon: Icon(
+              isSearched ? Icons.cancel : Icons.search,
+              size: 32.0,
+            )),
+      ),
     );
   }
 }
