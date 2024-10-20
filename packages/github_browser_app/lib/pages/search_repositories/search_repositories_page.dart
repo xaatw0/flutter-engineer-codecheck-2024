@@ -1,6 +1,5 @@
 import 'package:domain/entities/git_repository_entity.dart';
 import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
-import 'package:domain/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser_app/extensions/responsive_extension.dart';
@@ -19,9 +18,6 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
   SearchRepositoriesPage({super.key});
 
   static const path = '/search_repositories';
-
-  final _suggestionUseCase =
-      ServiceLocator.singleton().useCaseList.getKeywordSuggestionsUseCase();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,7 +48,9 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
             Column(
               children: [
                 SearchAndConfirmBox(
-                  fetchSuggestions: _suggestionUseCase.getSuggestion,
+                  fetchSuggestions: (value) => ref
+                      .read(searchRepositoriesStateProvider.notifier)
+                      .getSuggestions(value),
                   onChangeKeyword: (value) => ref
                       .read(searchRepositoriesStateProvider.notifier)
                       .changeKeyword(value),
