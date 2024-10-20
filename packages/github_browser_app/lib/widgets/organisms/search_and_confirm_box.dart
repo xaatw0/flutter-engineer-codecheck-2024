@@ -6,7 +6,7 @@ import 'package:github_browser_app/widgets/molecules/search_cancel_button.dart';
 
 import '../atoms/app_text_field.dart';
 
-class SearchAndConfirmBox extends StatefulWidget {
+class SearchAndConfirmBox extends StatelessWidget {
   const SearchAndConfirmBox({
     super.key,
     required this.isKeywordEmpty,
@@ -29,19 +29,14 @@ class SearchAndConfirmBox extends StatefulWidget {
   final void Function(String value) onChangeKeyword;
 
   @override
-  State<SearchAndConfirmBox> createState() => _SearchAndConfirmBoxState();
-}
-
-class _SearchAndConfirmBoxState extends State<SearchAndConfirmBox> {
-  @override
   Widget build(BuildContext context) {
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty || widget.isSearched) {
+        if (textEditingValue.text.isEmpty || isSearched) {
           return const Iterable<String>.empty();
         }
 
-        return widget.fetchSuggestions(textEditingValue.text);
+        return fetchSuggestions(textEditingValue.text);
       },
       fieldViewBuilder: (
         BuildContext context,
@@ -55,22 +50,22 @@ class _SearchAndConfirmBoxState extends State<SearchAndConfirmBox> {
               child: AppTextField(
                 controller: fieldTextEditingController,
                 focusNode: fieldFocusNode,
-                isSearched: widget.isSearched,
+                isSearched: isSearched,
                 onChanged: (value) {
-                  widget.onChangeKeyword(value);
+                  onChangeKeyword(value);
                 },
-                onSubmitted: () => widget.onSearch(),
+                onSubmitted: () => onSearch(),
                 hintText: AppLocalizations.of(context).inputSearchWord,
               ),
             ),
             const SizedBox(width: 8),
             SearchCancelButton(
-                isSearched: widget.isSearched,
-                isKeywordEmpty: widget.isKeywordEmpty,
-                onReset: widget.onReset,
+                isSearched: isSearched,
+                isKeywordEmpty: isKeywordEmpty,
+                onReset: onReset,
                 onSearch: () {
                   onFieldSubmitted();
-                  widget.onSearch();
+                  onSearch();
                 }),
           ],
         );
