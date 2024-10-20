@@ -10,7 +10,6 @@ class SearchAndConfirmBox extends StatelessWidget {
   const SearchAndConfirmBox({
     super.key,
     required this.isKeywordEmpty,
-    required this.isSearched,
     required this.onSearch,
     required this.onReset,
     required this.fetchSuggestions,
@@ -18,9 +17,9 @@ class SearchAndConfirmBox extends StatelessWidget {
     required this.isFuncSearched,
   });
 
-  /// 検索が実施されたか。検索後、テキストの変更ができなくなり、検索ボタンが削除ボタンに変更される
-  final bool isSearched;
-
+  /// 検索が実施されたか。検索後、テキストの変更ができなくなり、検索ボタンが削除ボタンに変更される。
+  /// 変数として渡すと作成時点の値が取得される。optionsBuilderが実施された瞬間の値が欲しいため、
+  /// 関数を設定する。
   final bool Function() isFuncSearched;
 
   /// キーワードが空白かどうか。空白の場合、検索ボタンが押せない
@@ -35,8 +34,6 @@ class SearchAndConfirmBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
-        print('isSearched in box: $isSearched');
-        print('isFuncSearched in box: ${isFuncSearched()}');
         if (textEditingValue.text.isEmpty || isFuncSearched()) {
           return const Iterable<String>.empty();
         }
@@ -56,7 +53,7 @@ class SearchAndConfirmBox extends StatelessWidget {
               child: AppTextField(
                 controller: fieldTextEditingController,
                 focusNode: fieldFocusNode,
-                isReadOnly: isSearched,
+                isReadOnly: isFuncSearched(),
                 onChanged: onChangeKeyword,
                 onSubmitted: () => onSearch(),
                 hintText: AppLocalizations.of(context).inputSearchWord,
@@ -64,16 +61,16 @@ class SearchAndConfirmBox extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             SearchCancelButton(
-                isSearched: isSearched,
+                isSearched: isFuncSearched(),
                 isKeywordEmpty: isKeywordEmpty,
                 onReset: onReset,
                 onSearch: () {
-                  print('onSearch start');
                   onSearch();
+
+                  // キーワードを入れ直すと、optionsBuilder が動作する
+                  // 動作させないと、サジェストワードが表示されたままになる
                   final keyword = fieldTextEditingController.text;
-                  onFieldSubmitted();
                   fieldTextEditingController.text = keyword;
-                  print('onSearch end');
                 }),
           ],
         );

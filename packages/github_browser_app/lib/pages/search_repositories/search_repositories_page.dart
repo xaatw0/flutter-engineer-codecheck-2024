@@ -28,13 +28,10 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
     // watch対象
     final isLoading =
         ref.watch(searchRepositoriesStateProvider.select((e) => e.isLoading));
-    final isSearched =
-        ref.watch(searchRepositoriesStateProvider.select((e) => e.isSearched));
     final isKeywordEmpty = ref.watch(
         searchRepositoriesStateProvider.select((e) => e.keyword.isEmpty));
-
-    // 追加前後にisLoadingが変更、リセット時にisSearchedがfalseになるので、watchする必要がない
-    final items = ref.read(searchRepositoriesStateProvider).entities;
+    final items =
+        ref.watch(searchRepositoriesStateProvider.select((e) => e.entities));
 
     final _kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
 
@@ -48,7 +45,6 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
         ? 0.0
         : (windowWidth - maxTileSize * gridCrossAxisCount) / 2;
 
-    print('isSearched in page: $isSearched');
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -66,7 +62,6 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                       .read(searchRepositoriesStateProvider.notifier)
                       .resetAfterAsk(this, context),
                   isKeywordEmpty: isKeywordEmpty,
-                  isSearched: isSearched,
                   isFuncSearched: () =>
                       ref.read(searchRepositoriesStateProvider).isSearched,
                 ),

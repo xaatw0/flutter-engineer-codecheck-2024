@@ -30,16 +30,13 @@ class SearchRepositoriesState extends _$SearchRepositoriesState {
   }
 
   Future<void> loadRepositories() async {
-    print('loadRepositories start');
     state = state.copyWith(
       isSearched: true,
       isLoading: true,
     );
-    print('loadGitRepositories start: isSearched:${state.isSearched}');
 
     final repositories =
         await _useCase.loadGitRepositories(state.keyword, state.page);
-    print('loadGitRepositories end');
 
     state = state.copyWith(
       page: state.page + 1,
