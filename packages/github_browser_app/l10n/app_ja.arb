@@ -23,5 +23,9 @@
   "cyan": "シアン",
   "materialYou":"materialYou",
 
+  "hostNotFoundPleaseCheckNetwork": "ホストが見つかりませんでした。\nネットワークを確認してください。",
+  "tooManyRequestsPleaseWait": "リクエストが多すぎて、サーバに拒否されました。\nしばらくお待ちください。",
+  "invalidDataFormatReceived": "不正なフォーマットのデータをサーバから受け取りました",
+
   "end":"end"
 }

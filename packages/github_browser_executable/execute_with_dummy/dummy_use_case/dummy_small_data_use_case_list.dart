@@ -32,7 +32,7 @@ class _dummyRepository implements GithubGitRepository {
   @override
   Future<GithubSearchRepositoriesData> searchRepositories(
       String keyword, int page) async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     return GithubSearchRepositoriesData(
         totalCount: 1, incompleteResults: false, items: [flutterRepo]);
   }

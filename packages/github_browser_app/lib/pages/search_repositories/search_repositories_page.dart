@@ -2,6 +2,7 @@ import 'package:domain/entities/git_repository_entity.dart';
 import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:github_browser_app/extensions/exceptions_when_loading_repositories_extensions.dart';
 import 'package:github_browser_app/extensions/responsive_extension.dart';
 import 'package:github_browser_app/pages/search_repositories/ask_before_reset.dart';
 import 'package:github_browser_app/widgets/molecules/loading_indicator.dart';
@@ -15,7 +16,7 @@ part 'search_repositories_page.repository_tile.dart';
 part 'search_repositories_page.detail_drawer.dart';
 
 class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
-  SearchRepositoriesPage({super.key});
+  const SearchRepositoriesPage({super.key});
 
   static const path = '/search_repositories';
 
@@ -29,7 +30,7 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
     final items =
         ref.watch(searchRepositoriesStateProvider.select((e) => e.entities));
 
-    final _kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
+    final kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
 
     // ウィンドウ幅が大きくなるにしたがって、タイルの数を増やす。
     // タイルを4列表示時でさらに広いようであれば、横に空白を作る
@@ -88,17 +89,17 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                           ),
                           itemBuilder: (context, index) {
                             return _RepositoryTile(
-                              kerDrawer: _kerDrawer,
+                              kerDrawer: kerDrawer,
                               item: items[index],
                             );
                           }),
                     ),
                   ),
                 ),
-                if (isLoading) LoadingIndicator(),
+                if (isLoading) const LoadingIndicator(),
               ],
             ),
-            _DetailDrawer(kerDrawer: _kerDrawer),
+            _DetailDrawer(kerDrawer: kerDrawer),
           ],
         ),
       ),
@@ -111,12 +112,14 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
     required void Function() onError,
   }) {
     funcLoading().catchError((ex) {
-      final errorMessage =
-          ex is ExceptionsWhenLoadingRepositories ? ex.message : ex.toString();
+      if (context.mounted) {
+        final errorMessage = ex is ExceptionsWhenLoadingRepositories
+            ? ex.getMessage(AppLocalizations.of(context))
+            : ex.toString();
 
-      final snackBar = buildSnackBar(errorMessage);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+        final snackBar = buildSnackBar(errorMessage);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
       onError();
     });
   }
@@ -126,10 +129,10 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
       margin: const EdgeInsetsDirectional.all(8),
       content: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.warning,
               color: Colors.red,
             ),
