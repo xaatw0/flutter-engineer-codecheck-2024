@@ -9,11 +9,19 @@ import '../atoms/app_text_field.dart';
 class SearchAndConfirmBox extends StatefulWidget {
   const SearchAndConfirmBox({
     super.key,
+    required this.isKeywordEmpty,
+    required this.isSearched,
     required this.onSearch,
     required this.onReset,
     required this.fetchSuggestions,
     required this.onChangeKeyword,
   });
+
+  /// 検索が実施されたか。検索後、テキストの変更ができなくなり、検索ボタンが削除ボタンに変更される
+  final bool isSearched;
+
+  /// キーワードが空白かどうか。空白の場合、検索ボタンが押せない
+  final bool isKeywordEmpty;
 
   final FutureOr<List<String>> Function(String value) fetchSuggestions;
   final void Function() onReset;
@@ -25,48 +33,16 @@ class SearchAndConfirmBox extends StatefulWidget {
 }
 
 class _SearchAndConfirmBoxState extends State<SearchAndConfirmBox> {
-  final List<String> _options = [
-    'Apple',
-    'Banana',
-    'Cherry',
-    'Date',
-    'Grape',
-    'Orange',
-    'Pineapple',
-  ];
-
-  var _currentText = '';
-  var _submittedText = '';
-
-  var _isSubmitted = false;
-
-  void _onSelected(String value) {
-    setState(() {
-      _currentText = value;
-    });
-  }
-
-  void _onSubmitted(String value) {
-    widget.onSearch();
-    setState(() {
-      _submittedText = value;
-      _isSubmitted = true;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty || _isSubmitted) {
+        if (textEditingValue.text.isEmpty || widget.isSearched) {
           return const Iterable<String>.empty();
         }
 
         return widget.fetchSuggestions(textEditingValue.text);
       },
-      onSelected: (String selection) => _onSelected(selection),
-      displayStringForOption: (value) =>
-          (value == _submittedText ? '[履歴]' : '') + value,
       fieldViewBuilder: (
         BuildContext context,
         TextEditingController fieldTextEditingController,
@@ -79,26 +55,21 @@ class _SearchAndConfirmBoxState extends State<SearchAndConfirmBox> {
               child: AppTextField(
                 controller: fieldTextEditingController,
                 focusNode: fieldFocusNode,
-                isSearched: _isSubmitted,
+                isSearched: widget.isSearched,
                 onChanged: (value) {
-                  _currentText = value;
-                  _isSubmitted = false;
                   widget.onChangeKeyword(value);
                 },
-                onSubmitted: () => _onSubmitted(_currentText),
+                onSubmitted: () => widget.onSearch(),
                 hintText: AppLocalizations.of(context).inputSearchWord,
               ),
             ),
             const SizedBox(width: 8),
             SearchCancelButton(
-                isSearched: _isSubmitted,
-                isKeywordEmpty: _currentText.isEmpty,
+                isSearched: widget.isSearched,
+                isKeywordEmpty: widget.isKeywordEmpty,
                 onReset: widget.onReset,
                 onSearch: () {
-                  final text = fieldTextEditingController.text;
-                  _onSubmitted(text);
-                  fieldTextEditingController.text = text;
-
+                  onFieldSubmitted();
                   widget.onSearch();
                 }),
           ],

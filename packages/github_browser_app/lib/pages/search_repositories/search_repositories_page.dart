@@ -100,6 +100,12 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                   onReset: () => ref
                       .read(searchRepositoriesStateProvider.notifier)
                       .resetAfterAsk(this, context),
+                  isKeywordEmpty: ref.read(
+                    searchRepositoriesStateProvider
+                        .select((e) => e.keyword.isEmpty),
+                  ),
+                  isSearched: ref.read(searchRepositoriesStateProvider
+                      .select((e) => e.isSearched)),
                 ),
                 Expanded(
                   child: NotificationListener(
