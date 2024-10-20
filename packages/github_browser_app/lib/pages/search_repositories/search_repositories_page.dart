@@ -1,5 +1,6 @@
 import 'package:domain/entities/git_repository_entity.dart';
 import 'package:domain/exceptions/exceptions_when_loading_repositories.dart';
+import 'package:domain/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_browser_app/extensions/responsive_extension.dart';
@@ -8,6 +9,7 @@ import 'package:github_browser_app/widgets/molecules/loading_indicator.dart';
 import 'package:modeless_drawer/modeless_drawer.dart';
 import 'package:github_browser_app/gen_l10n/app_localizations.dart';
 
+import '../../widgets/organisms/search_and_confirm_box.dart';
 import 'search_repositories_state.dart';
 
 part 'search_repositories_page.repository_tile.dart';
@@ -16,9 +18,12 @@ part 'search_repositories_page.keyword_text_field.dart';
 part 'search_repositories_page.search_cancel_button.dart';
 
 class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
-  const SearchRepositoriesPage({super.key});
+  SearchRepositoriesPage({super.key});
 
   static const path = '/search_repositories';
+
+  final _suggestionUseCase =
+      ServiceLocator.singleton().useCaseList.getKeywordSuggestionsUseCase();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,6 +89,17 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                       ),
                     ],
                   ),
+                ),
+                SearchAndConfirmBox(
+                  fetchSuggestions: _suggestionUseCase.getSuggestion,
+                  onChangeKeyword: (value) => ref
+                      .read(searchRepositoriesStateProvider.notifier)
+                      .changeKeyword(value),
+                  onSearch: () => onSearch(context,
+                      ref.read(searchRepositoriesStateProvider.notifier)),
+                  onReset: () => ref
+                      .read(searchRepositoriesStateProvider.notifier)
+                      .resetAfterAsk(this, context),
                 ),
                 Expanded(
                   child: NotificationListener(
