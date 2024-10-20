@@ -1,3 +1,4 @@
+import 'package:domain/use_case/keyword_suggestions_use_case.dart';
 import 'package:domain/use_case/search_repositories_use_case.dart';
 import 'package:domain/use_case/use_case_list.dart';
 import 'package:use_case/github_use_case/github_search_repositories_use_case.dart';
@@ -5,12 +6,21 @@ import 'package:use_case/github_use_case/github_search_repositories_use_case.dar
 import 'package:infrastructure/github_git_repository/data/github_search_repositories_data.dart';
 import 'package:infrastructure/github_git_repository/github_git_repository.dart';
 
+import 'package:use_case/github_use_case/keyword_suggestions/search_repositories_keyword_suggestions_use_case.dart';
+
 class DummySmallDataUseCaseList implements UseCaseList {
   late final _searchRepositoriesUseCase = _DummySearchRepositoriesUseCase();
+  late final _keywordSuggestionsUseCase =
+      SearchRepositoriesKeywordSuggestionsUseCase();
 
   @override
   SearchRepositoriesUseCase getSearchRepositoriesUseCase() {
     return _searchRepositoriesUseCase;
+  }
+
+  @override
+  KeywordSuggestionsUseCase getKeywordSuggestionsUseCase() {
+    return _keywordSuggestionsUseCase;
   }
 }
 

@@ -12,6 +12,9 @@ class SearchRepositoriesState extends _$SearchRepositoriesState {
   SearchRepositoriesUseCase get _useCase =>
       ServiceLocator.singleton().useCaseList.getSearchRepositoriesUseCase();
 
+  final _suggestionUseCase =
+      ServiceLocator.singleton().useCaseList.getKeywordSuggestionsUseCase();
+
   @override
   SearchRepositoriesModel build() => const SearchRepositoriesModel(
         keyword: '',
@@ -35,6 +38,7 @@ class SearchRepositoriesState extends _$SearchRepositoriesState {
       isLoading: true,
     );
 
+    _suggestionUseCase.registerKeyword(state.keyword);
     final repositories =
         await _useCase.loadGitRepositories(state.keyword, state.page);
 
@@ -60,5 +64,13 @@ class SearchRepositoriesState extends _$SearchRepositoriesState {
     if (result == true) {
       reset();
     }
+  }
+
+  /// サジェストワードを取得する
+  List<String> getSuggestions(String keyword) {
+    // Autocomplete から渡されるキーワードを使う。
+    // Riverpodのキーワードを使うと、一つ前の状態のキーワードになる。
+    // ユーザが入力→サジェストワードを検索→Riverpodにキーワードが登録される、という流れのため
+    return _suggestionUseCase.getSuggestion(keyword);
   }
 }
