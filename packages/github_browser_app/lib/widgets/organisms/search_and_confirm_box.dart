@@ -15,10 +15,13 @@ class SearchAndConfirmBox extends StatelessWidget {
     required this.onReset,
     required this.fetchSuggestions,
     required this.onChangeKeyword,
+    required this.isFuncSearched,
   });
 
   /// 検索が実施されたか。検索後、テキストの変更ができなくなり、検索ボタンが削除ボタンに変更される
   final bool isSearched;
+
+  final bool Function() isFuncSearched;
 
   /// キーワードが空白かどうか。空白の場合、検索ボタンが押せない
   final bool isKeywordEmpty;
@@ -33,12 +36,14 @@ class SearchAndConfirmBox extends StatelessWidget {
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
         print('isSearched in box: $isSearched');
-        if (textEditingValue.text.isEmpty || isSearched) {
+        print('isFuncSearched in box: ${isFuncSearched()}');
+        if (textEditingValue.text.isEmpty || isFuncSearched()) {
           return const Iterable<String>.empty();
         }
 
         return fetchSuggestions(textEditingValue.text);
       },
+      onSelected: onChangeKeyword,
       fieldViewBuilder: (
         BuildContext context,
         TextEditingController fieldTextEditingController,
@@ -63,10 +68,12 @@ class SearchAndConfirmBox extends StatelessWidget {
                 isKeywordEmpty: isKeywordEmpty,
                 onReset: onReset,
                 onSearch: () {
-                  final text = fieldTextEditingController.text;
+                  print('onSearch start');
                   onSearch();
+                  final keyword = fieldTextEditingController.text;
                   onFieldSubmitted();
-                  fieldTextEditingController.text = text;
+                  fieldTextEditingController.text = keyword;
+                  print('onSearch end');
                 }),
           ],
         );

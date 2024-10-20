@@ -67,6 +67,8 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                       .resetAfterAsk(this, context),
                   isKeywordEmpty: isKeywordEmpty,
                   isSearched: isSearched,
+                  isFuncSearched: () =>
+                      ref.read(searchRepositoriesStateProvider).isSearched,
                 ),
                 Expanded(
                   child: NotificationListener(
