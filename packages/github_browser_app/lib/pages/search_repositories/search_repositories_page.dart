@@ -56,40 +56,6 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
           children: [
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _KeywordTextField(
-                          isSearched: isSearched,
-                          onChanged: ref
-                              .read(searchRepositoriesStateProvider.notifier)
-                              .changeKeyword,
-                          onSubmitted: () => onSearch(
-                              context,
-                              ref.read(
-                                  searchRepositoriesStateProvider.notifier)),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      CircleAvatar(
-                        radius: 32,
-                        child: _SearchCancelButton(
-                          isSearched: isSearched,
-                          isKeywordEmpty: isKeywordEmpty,
-                          onReset: () => ref
-                              .read(searchRepositoriesStateProvider.notifier)
-                              .resetAfterAsk(this, context),
-                          onSearch: () => onSearch(
-                              context,
-                              ref.read(
-                                  searchRepositoriesStateProvider.notifier)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 SearchAndConfirmBox(
                   fetchSuggestions: _suggestionUseCase.getSuggestion,
                   onChangeKeyword: (value) => ref
