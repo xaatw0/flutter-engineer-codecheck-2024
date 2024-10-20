@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
-  const AppTextField({
+  const AppTextField({super.key, 
     required this.isReadOnly,
     required this.onChanged,
     required this.onSubmitted,

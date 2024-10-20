@@ -18,7 +18,7 @@ class AppText extends StatelessWidget {
     this.isBold = false,
     this.textColor,
     this.hasUnderline = false,
-    this.height = null,
+    this.height,
   });
 
   final String text;

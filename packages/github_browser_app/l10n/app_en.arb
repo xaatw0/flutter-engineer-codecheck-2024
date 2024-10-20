@@ -31,5 +31,9 @@
   "cyan": "Cyan",
   "materialYou":"materialYou",
 
+  "hostNotFoundPleaseCheckNetwork": "Host not found. \nPlease check your network.",
+  "tooManyRequestsPleaseWait": "Too many requests. \nThe server has denied your request. Please wait a moment.",
+  "invalidDataFormatReceived": "Received data in an invalid format from the server.",
+
   "end":"end"
 }

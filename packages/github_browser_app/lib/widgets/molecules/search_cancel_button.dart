@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SearchCancelButton extends StatelessWidget {
   const SearchCancelButton({
+    super.key,
     required this.isSearched,
     required this.isKeywordEmpty,
     required this.onReset,
@@ -16,11 +17,9 @@ class SearchCancelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       transitionBuilder: (Widget child, Animation<double> animation) {
-        return ScaleTransition(
-            child: child,
-            scale: animation.drive(Tween<double>(begin: 1, end: 0.7)));
+        return ScaleTransition(scale: animation, child: child);
       },
       child: CircleAvatar(
         radius: 32,

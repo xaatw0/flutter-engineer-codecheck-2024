@@ -330,7 +330,7 @@ void main() {
     });
 
     test('2. JSONからクラスを作成し、Jsonに変換して内容を確認', () {
-      final jsonString = '''
+      const jsonString = '''
       {
         "total_count": 750330,
         "incomplete_results": false,

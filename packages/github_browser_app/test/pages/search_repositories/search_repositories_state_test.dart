@@ -164,9 +164,8 @@ void main() {
 
   group('resetAfterAsk', () {
     final askIfReset = MockAskIfReset();
-    final notifier =
-        () => container.read(searchRepositoriesStateProvider.notifier);
-    final state = () => container.read(searchRepositoriesStateProvider);
+    notifier() => container.read(searchRepositoriesStateProvider.notifier);
+    state() => container.read(searchRepositoriesStateProvider);
 
     final context = MockBuildContext();
 

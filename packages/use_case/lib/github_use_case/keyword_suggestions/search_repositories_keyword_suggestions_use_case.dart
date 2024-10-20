@@ -60,6 +60,7 @@ class SearchRepositoriesKeywordSuggestionsUseCase
 
   static const _kMaxHistory = 10;
 
+  @override
   void registerKeyword(String keyword) {
     if (_userKeywordHistory.contains(keyword)) {
       _userKeywordHistory.remove(keyword);
@@ -71,6 +72,7 @@ class SearchRepositoriesKeywordSuggestionsUseCase
     }
   }
 
+  @override
   List<String> getSuggestion(String keyword) {
     if (keyword.isEmpty) {
       return _userKeywordHistory;

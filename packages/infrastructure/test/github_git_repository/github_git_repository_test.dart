@@ -40,7 +40,7 @@ void main() {
           'https://api.github.com/search/repositories?q=flutter&page=1')),
     ).thenAnswer((_) async => mockResponse);
 
-    final target = GithubGitRepository();
+    const target = GithubGitRepository();
     final result = await target.searchRepositories('flutter', 1);
     expect(result.totalCount, 750330);
 
@@ -50,7 +50,7 @@ void main() {
   });
 
   test('引数', () async {
-    final target = GithubGitRepository();
+    const target = GithubGitRepository();
 
     // 実行前は呼ばれておらず、実行するとcalledで確認され、確認すると呼ばれていない状態になることを確認
     when(
@@ -78,7 +78,7 @@ void main() {
   });
 
   test('例外', () {
-    final target = GithubGitRepository();
+    const target = GithubGitRepository();
 
     expect(
         () => target.catchNetworkException(

@@ -10,14 +10,14 @@ final pathInfoList = [
   // 検索画面
   PathInfo(
     SearchRepositoriesPage.path,
-    SearchRepositoriesPage(),
+    const SearchRepositoriesPage(),
     Icons.search,
     (appLoc) => appLoc.repositorySearch,
   ),
   // 設定画面
   PathInfo(
     SettingPage.path,
-    SettingPage(),
+    const SettingPage(),
     Icons.settings,
     (appLoc) => appLoc.settings,
   )
