@@ -1,21 +1,28 @@
-part of 'search_repositories_page.dart';
+import 'package:flutter/material.dart';
 
-class _KeywordTextField extends StatelessWidget {
-  const _KeywordTextField({
-    required this.isSearched,
+class AppTextField extends StatelessWidget {
+  const AppTextField({
+    required this.isReadOnly,
     required this.onChanged,
     required this.onSubmitted,
+    this.hintText = '',
+    this.controller,
+    this.focusNode,
   });
 
-  final bool isSearched;
+  final bool isReadOnly;
   final void Function(String value) onChanged;
   final void Function() onSubmitted;
-
+  final String hintText;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
+      focusNode: focusNode,
       decoration: InputDecoration(
-        hintText: AppLocalizations.of(context).inputSearchWord,
+        hintText: hintText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(32),
         ),
@@ -24,7 +31,7 @@ class _KeywordTextField extends StatelessWidget {
       textInputAction: TextInputAction.search,
       onChanged: onChanged,
       onSubmitted: (_) => onSubmitted(),
-      readOnly: isSearched,
+      readOnly: isReadOnly,
     );
   }
 }

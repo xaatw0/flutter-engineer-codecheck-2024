@@ -8,15 +8,14 @@ import 'package:github_browser_app/widgets/molecules/loading_indicator.dart';
 import 'package:modeless_drawer/modeless_drawer.dart';
 import 'package:github_browser_app/gen_l10n/app_localizations.dart';
 
+import '../../widgets/organisms/search_and_confirm_box.dart';
 import 'search_repositories_state.dart';
 
 part 'search_repositories_page.repository_tile.dart';
 part 'search_repositories_page.detail_drawer.dart';
-part 'search_repositories_page.keyword_text_field.dart';
-part 'search_repositories_page.search_cancel_button.dart';
 
 class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
-  const SearchRepositoriesPage({super.key});
+  SearchRepositoriesPage({super.key});
 
   static const path = '/search_repositories';
 
@@ -25,13 +24,10 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
     // watch対象
     final isLoading =
         ref.watch(searchRepositoriesStateProvider.select((e) => e.isLoading));
-    final isSearched =
-        ref.watch(searchRepositoriesStateProvider.select((e) => e.isSearched));
     final isKeywordEmpty = ref.watch(
         searchRepositoriesStateProvider.select((e) => e.keyword.isEmpty));
-
-    // 追加前後にisLoadingが変更、リセット時にisSearchedがfalseになるので、watchする必要がない
-    final items = ref.read(searchRepositoriesStateProvider).entities;
+    final items =
+        ref.watch(searchRepositoriesStateProvider.select((e) => e.entities));
 
     final _kerDrawer = GlobalKey<ModelessDrawerState<GitRepositoryEntity>>();
 
@@ -51,39 +47,21 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
           children: [
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _KeywordTextField(
-                          isSearched: isSearched,
-                          onChanged: ref
-                              .read(searchRepositoriesStateProvider.notifier)
-                              .changeKeyword,
-                          onSubmitted: () => onSearch(
-                              context,
-                              ref.read(
-                                  searchRepositoriesStateProvider.notifier)),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      CircleAvatar(
-                        radius: 32,
-                        child: _SearchCancelButton(
-                          isSearched: isSearched,
-                          isKeywordEmpty: isKeywordEmpty,
-                          onReset: () => ref
-                              .read(searchRepositoriesStateProvider.notifier)
-                              .resetAfterAsk(this, context),
-                          onSearch: () => onSearch(
-                              context,
-                              ref.read(
-                                  searchRepositoriesStateProvider.notifier)),
-                        ),
-                      ),
-                    ],
-                  ),
+                SearchAndConfirmBox(
+                  fetchSuggestions: (value) => ref
+                      .read(searchRepositoriesStateProvider.notifier)
+                      .getSuggestions(value),
+                  onChangeKeyword: (value) => ref
+                      .read(searchRepositoriesStateProvider.notifier)
+                      .changeKeyword(value),
+                  onSearch: () => onSearch(context,
+                      ref.read(searchRepositoriesStateProvider.notifier)),
+                  onReset: () => ref
+                      .read(searchRepositoriesStateProvider.notifier)
+                      .resetAfterAsk(this, context),
+                  isKeywordEmpty: isKeywordEmpty,
+                  isFuncSearched: () =>
+                      ref.read(searchRepositoriesStateProvider).isSearched,
                 ),
                 Expanded(
                   child: NotificationListener(
@@ -102,6 +80,7 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                       padding: EdgeInsets.symmetric(horizontal: gridPadding),
                       child: GridView.builder(
                           itemCount: items.length,
+                          key: const PageStorageKey('SearchRepositoriesPage'),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: gridCrossAxisCount,
