@@ -80,6 +80,7 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                       padding: EdgeInsets.symmetric(horizontal: gridPadding),
                       child: GridView.builder(
                           itemCount: items.length,
+                          key: const PageStorageKey('SearchRepositoriesPage'),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: gridCrossAxisCount,
