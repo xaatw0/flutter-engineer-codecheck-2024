@@ -1,5 +1,6 @@
 import 'package:domain/entities/git_repository_entity.dart';
 import 'package:domain/service_locator.dart';
+import 'package:domain/use_case/keyword_suggestions_use_case.dart';
 import 'package:domain/use_case/search_repositories_use_case.dart';
 import 'package:domain/use_case/use_case_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,7 @@ import 'search_repositories_state_test.mocks.dart';
 @GenerateNiceMocks([
   MockSpec<UseCaseList>(),
   MockSpec<SearchRepositoriesUseCase>(),
+  MockSpec<KeywordSuggestionsUseCase>(),
   MockSpec<AskIfReset>(),
   MockSpec<BuildContext>()
 ])
@@ -24,6 +26,10 @@ void main() {
   final mockUserCaseList = MockUseCaseList();
   when(mockUserCaseList.getSearchRepositoriesUseCase())
       .thenReturn(mockSearchRepositoriesUseCase);
+
+  final mockKeywordSuggestionsUseCase = MockKeywordSuggestionsUseCase();
+  when(mockUserCaseList.getKeywordSuggestionsUseCase())
+      .thenReturn(mockKeywordSuggestionsUseCase);
   ServiceLocator.init(http.Client(), mockUserCaseList);
 
   late ProviderContainer container;
