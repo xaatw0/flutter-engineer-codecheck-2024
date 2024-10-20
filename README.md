@@ -242,7 +242,7 @@ UI層のページ図の構成について説明します。以下のガイドラ
  fvm flutter doctor -v
 
 [√] Flutter (Channel stable, 3.24.0, on Microsoft Windows [Version 10.0.22631.4317], locale ja-JP)
-    • Flutter version 3.24.0 on channel stable at C:\Users\Owner\fvm\versions\3.24.0
+    • Flutter version 3.24.0 on channel stable at C:\Users\{UserName}\fvm\versions\3.24.0
     • Upstream repository https://github.com/flutter/flutter.git
     • Framework revision 80c2e84975 (3 months ago), 2024-07-30 23:06:49 +0700
     • Engine revision b8800d88be
@@ -252,7 +252,7 @@ UI層のページ図の構成について説明します。以下のガイドラ
 [√] Windows Version (Installed version of Windows is version 10 or higher)
 
 [√] Android toolchain - develop for Android devices (Android SDK version 34.0.0)
-    • Android SDK at C:\Users\Owner\AppData\Local\Android\sdk
+    • Android SDK at C:\Users\{UserName}\AppData\Local\Android\sdk
     • Platform android-34, build-tools 34.0.0
     • Java binary at: C:\Program Files\Android\Android Studio\jbr\bin\java
     • Java version OpenJDK Runtime Environment (build 21.0.3+-12099254-b509.4)
@@ -276,7 +276,7 @@ UI層のページ図の構成について説明します。以下のガイドラ
     • Java version OpenJDK Runtime Environment (build 21.0.3+-12099254-b509.4)
 
 [√] Connected device (4 available)
-    • Pixel 4a 5G (mobile) • 09271JECB06619 • android-arm64  • Android 14 (API 34)
+    • Pixel 4a 5G (mobile) • 09271JECB0---- • android-arm64  • Android 14 (API 34)
     • Windows (desktop)    • windows        • windows-x64    • Microsoft Windows [Version 10.0.22631.4317]
     • Chrome (web)         • chrome         • web-javascript • Google Chrome 129.0.6668.101
     • Edge (web)           • edge           • web-javascript • Microsoft Edge 129.0.2792.89
@@ -288,6 +288,52 @@ UI層のページ図の構成について説明します。以下のガイドラ
 
 ```
 
+### Mac
+```
+ fvm flutter doctor -v
+[✓] Flutter (Channel stable, 3.24.0, on macOS 14.5 23F79 darwin-arm64, locale ja-JP)
+    • Flutter version 3.24.0 on channel stable at /Users/{UserName}/fvm/versions/3.24.0
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 80c2e84975 (3 months ago), 2024-07-30 23:06:49 +0700
+    • Engine revision b8800d88be
+    • Dart version 3.5.0
+    • DevTools version 2.37.2
+
+[✓] Android toolchain - develop for Android devices (Android SDK version 33.0.0-rc4)
+    • Android SDK at /Users/{UserName}/Library/Android/sdk
+    • Platform android-34, build-tools 33.0.0-rc4
+    • Java binary at: /Applications/Android Studio 2.app/Contents/jbr/Contents/Home/bin/java
+    • Java version OpenJDK Runtime Environment (build 17.0.6+0-17.0.6b802.4-9586694)
+    • All Android licenses accepted.
+
+[✓] Xcode - develop for iOS and macOS (Xcode 15.3)
+    • Xcode at /Applications/Xcode.app/Contents/Developer
+    • Build 15E204a
+    • CocoaPods version 1.15.2
+
+[✓] Chrome - develop for the web
+    • Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+[✓] Android Studio (version 2022.2)
+    • Android Studio at /Applications/Android Studio 2.app/Contents
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 17.0.6+0-17.0.6b802.4-9586694)
+
+[✓] Connected device (4 available)
+    • iPhone (3) (mobile)             • 00008030-000939CE36FA---- • ios            • iOS 17.6.1 21G101
+    • macOS (desktop)                 • macos                     • darwin-arm64   • macOS 14.5 23F79 darwin-arm64
+    • Mac Designed for iPad (desktop) • mac-designed-for-ipad     • darwin         • macOS 14.5 23F79 darwin-arm64
+    • Chrome (web)                    • chrome                    • web-javascript • Google Chrome 129.0.6668.103
+
+[✓] Network resources
+    • All expected network resources are available.
+
+• No issues found!
+
+```
 
 ## まとめ
 
