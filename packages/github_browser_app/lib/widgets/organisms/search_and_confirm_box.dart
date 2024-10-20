@@ -32,6 +32,7 @@ class SearchAndConfirmBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
+        print('isSearched in box: $isSearched');
         if (textEditingValue.text.isEmpty || isSearched) {
           return const Iterable<String>.empty();
         }
@@ -51,9 +52,7 @@ class SearchAndConfirmBox extends StatelessWidget {
                 controller: fieldTextEditingController,
                 focusNode: fieldFocusNode,
                 isReadOnly: isSearched,
-                onChanged: (value) {
-                  onChangeKeyword(value);
-                },
+                onChanged: onChangeKeyword,
                 onSubmitted: () => onSearch(),
                 hintText: AppLocalizations.of(context).inputSearchWord,
               ),
@@ -64,8 +63,10 @@ class SearchAndConfirmBox extends StatelessWidget {
                 isKeywordEmpty: isKeywordEmpty,
                 onReset: onReset,
                 onSearch: () {
-                  onFieldSubmitted();
+                  final text = fieldTextEditingController.text;
                   onSearch();
+                  onFieldSubmitted();
+                  fieldTextEditingController.text = text;
                 }),
           ],
         );

@@ -48,6 +48,7 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
         ? 0.0
         : (windowWidth - maxTileSize * gridCrossAxisCount) / 2;
 
+    print('isSearched in page: $isSearched');
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -64,12 +65,8 @@ class SearchRepositoriesPage extends ConsumerWidget implements AskIfReset {
                   onReset: () => ref
                       .read(searchRepositoriesStateProvider.notifier)
                       .resetAfterAsk(this, context),
-                  isKeywordEmpty: ref.read(
-                    searchRepositoriesStateProvider
-                        .select((e) => e.keyword.isEmpty),
-                  ),
-                  isSearched: ref.read(searchRepositoriesStateProvider
-                      .select((e) => e.isSearched)),
+                  isKeywordEmpty: isKeywordEmpty,
+                  isSearched: isSearched,
                 ),
                 Expanded(
                   child: NotificationListener(
